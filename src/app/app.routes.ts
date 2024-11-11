@@ -1,26 +1,39 @@
 import { Routes } from '@angular/router';
-import { InicioComponent } from './page/inicio/inicio.component';
-import { CentroComponent } from './page/centro/centro.component';
-import { DonarComponent } from './page/donar/donar.component';
+import { CenterComponent } from './page/center/center.component';
 import { RankingComponent } from './page/ranking/ranking.component';
+import { MainComponent } from './page/main/main.component';
+import { DonateComponent } from './page/donate/donate.component';
+import { LoginComponent } from './page/login/login.component';
+import { RegisterComponent } from './page/register/register.component';
+import { DonateFormComponent } from './page/donate-form/donate-form.component';
 
 export const routes: Routes = [
     {
         path: '',
-        component: InicioComponent
+        component: MainComponent
     },
     {
-        path: 'Centros',
-        component: CentroComponent
+        path: 'Center',
+        component: CenterComponent
     },
     {
-        path: 'Donaciones',
-        component: DonarComponent
+        path: 'Donate',
+        component: DonateComponent
     },
     {
         path: 'Ranking',
         component: RankingComponent
     },
-    
-    
+    {
+        path: 'Login',
+        component: LoginComponent
+    },
+    {
+        path: 'Login/Register',
+        component: RegisterComponent
+    },
+    {
+        path: 'Donate/DonateForm',
+        component: DonateFormComponent
+    },
 ];

@@ -1,0 +1,41 @@
+<div class="bg-gradient-to-t from-purple-400/40 p-10">
+  <div class="max-w-xl mx-auto m-8 p-14">
+    <img src="Logo.png" class="mx-auto h-48 sm:h-60 mb-8" alt="Logo" />
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="w-full mb-6">
+        <label class="block text-sm text-black mb-2" for="name"></label>
+        <input formControlName="name" 
+               class=" w-full px-6 py-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:bg-sky-100" 
+               type="text" id="name" placeholder="Nombre" required>
+      </div>
+
+      <div class="w-full mb-6">
+        <label class="block text-sm text-black mb-2" for="lastname"></label>
+        <input formControlName="lastname" 
+               class="w-full px-6 py-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:bg-sky-100" 
+               type="text" id="lastname" placeholder="Apellido" required>
+      </div>
+
+      <div class="w-full mb-6">
+        <label class="block text-sm text-black mb-2" for="email"></label>
+        <input formControlName="email" 
+               class="w-full px-6 py-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:bg-sky-100" 
+               type="email" id="email" placeholder="Correo Electrónico" required>
+      </div>
+
+      <div class="w-full mb-6">
+        <label class="block text-sm text-black mb-2" for="password"></label>
+        <input formControlName="password" 
+               class="w-full px-6 py-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:bg-sky-100" 
+               type="password" id="password" placeholder="Contraseña" required>
+      </div>
+
+      <div class="w-full flex justify-center mb-6">
+        <button type="submit" class="px-14 py-3 text-white font-light tracking-wider bg-cyan-600 hover:bg-gray-800 rounded-lg">
+          Registrar
+        </button>
+      
+      </div>
+    </form>
+  </div>
+</div>

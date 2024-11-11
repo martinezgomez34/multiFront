@@ -1,0 +1,49 @@
+<main class="flex-1 bg-white overflow-hidden">
+    <div class="group/item bg-transparent">
+      <div class="bg-gradient-to-t from-cyan-700/50">
+        <div class="flex items-center justify-center overflow-hidden">
+          <img src="Logo.png" class="h-40 w-auto" alt="Logo" />
+        </div>
+        <div class="relative mt-10 w-full h-[20vh] sm:h-[30vh] lg:h-[20vh] text-gray-800 text-lg max-w-full overflow-hidden">
+          <!-- Sliders -->
+          <input class="hidden peer/slider1" type="radio" name="slider" id="slider1" checked />
+          <input class="hidden peer/slider2" type="radio" name="slider" id="slider2" />
+          <input class="hidden peer/slider3" type="radio" name="slider" id="slider3" />
+        
+          <!-- Slides container -->
+          <div class="relative flex transition-all duration-500 ease-in-out w-[300vw] 
+                      peer-checked/slider1:-translate-x-0 peer-checked/slider2:-translate-x-[100vw] peer-checked/slider3:-translate-x-[200vw] max-w-full">
+            <!-- Slide 1 -->
+            <div class="flex items-center justify-center w-full h-full px-10 sm:px-20">
+              <p class="text-center text-base sm:text-lg md:text-xl lg:text-2xl">
+                Creemos que cada acción, por pequeña que sea, puede tener un efecto positivo en la vida de alguien. Estamos orgullosos de formar parte de un esfuerzo global para construir un futuro más justo y equitativo para todos.
+              </p>
+            </div>
+            
+            <!-- Additional slides can be duplicated here with similar structure -->
+          </div>
+          
+          <!-- Navigation dots -->
+          <div class=" w-full flex justify-center gap-6 bottom-2">
+            <label class="flex items-center justify-center w-5 h-5 bg-white rounded-full cursor-pointer opacity-50 z-10 transition-all duration-300 ease-in-out hover:scale-125 hover:opacity-100" for="slider1"></label>
+            <label class="flex items-center justify-center w-5 h-5 bg-white rounded-full cursor-pointer opacity-50 z-10 transition-all duration-300 ease-in-out hover:scale-125 hover:opacity-100" for="slider2"></label>
+            <label class="flex items-center justify-center w-5 h-5 bg-white rounded-full cursor-pointer opacity-50 z-10 transition-all duration-300 ease-in-out hover:scale-125 hover:opacity-100" for="slider3"></label>
+          </div>
+        </div>
+        
+        
+      </div>
+    </div>
+    <div class="group/item bg-transparent">
+      <div class="bg-gradient-to-b from-cyan-700/50">
+        <app-table-news></app-table-news>
+      </div>
+      <div class="flex items-center justify-center h-full p-6">
+        <div class="text-center max-w-lg p-8">
+          <h2 class="text-2xl font-bold mb-3">Unidos por la Comunidad</h2>
+          <p class="mb-4">Nuestra misión es apoyar a las comunidades vulnerables a través de donaciones colectivas, asegurando que cada contribución tenga un impacto positivo y sostenible. ¡Gracias por unirte a nosotros en este viaje solidario!</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  
