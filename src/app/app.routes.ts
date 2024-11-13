@@ -6,11 +6,13 @@ import { DonateComponent } from './page/donate/donate.component';
 import { LoginComponent } from './page/login/login.component';
 import { RegisterComponent } from './page/register/register.component';
 import { DonateFormComponent } from './page/donate-form/donate-form.component';
+import { NgModule } from '@angular/core';
+import { RouterModule} from '@angular/router';
 
 export const routes: Routes = [
     {
         path: '',
-        component: MainComponent
+        component: MainComponent,
     },
     {
         path: 'Center',
