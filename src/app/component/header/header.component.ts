@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule} from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { LoginComponent } from '../../page/login/login.component';
 import { DarkmodeButtonComponent } from '../button/darkmode-button/darkmode-button.component';
 import { LogoComponent } from "../logo/logo.component";
 
@@ -25,4 +24,5 @@ export class HeaderComponent {
     toggleDarkMode(isDark: boolean): void { 
     this.darkModeToggled.emit(isDark); 
   }
+  showMenu = false;
 }
