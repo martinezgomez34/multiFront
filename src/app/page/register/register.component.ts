@@ -36,7 +36,7 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.form.valid) {
-      this.apiService.createUser(this.form.value).subscribe(user => {
+      this.apiService.registerUser(this.form.value).subscribe(user => {
         console.log('Login successful:', user);
       }, error => {
         console.error('Error creating user', error);

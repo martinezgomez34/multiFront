@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule} from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { DarkmodeButtonComponent } from '../button/darkmode-button/darkmode-button.component';
 import { LogoComponent } from "../logo/logo.component";
+import { StateService } from '../../service/state.service';
 
 @Component({
   selector: 'app-header',
@@ -21,8 +22,15 @@ import { LogoComponent } from "../logo/logo.component";
 export class HeaderComponent {
   @Input() isDarkMode!: boolean;
   @Output() darkModeToggled = new EventEmitter<boolean>();
-    toggleDarkMode(isDark: boolean): void { 
+
+  showMenu = false;
+
+  stateService = inject(StateService)
+  constructor(){
+    console.log(this.stateService, "paso por aqui")
+  }
+
+  toggleDarkMode(isDark: boolean): void { 
     this.darkModeToggled.emit(isDark); 
   }
-  showMenu = false;
 }
