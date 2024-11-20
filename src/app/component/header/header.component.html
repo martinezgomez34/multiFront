@@ -11,6 +11,12 @@
 
                     <ng-container *ngIf="stateService.isAuthenticated(); else loginLink">
                         <span class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ stateService.User().user_name }}</span>
+                        <button 
+  (click)="logout()" 
+  class="ml-4 px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm">
+  Cerrar Sesión
+</button>
+
                     </ng-container>
                       <ng-template #loginLink>
                         <a routerLink="Login" class="hover:text-gray-900 dark:text-gray-200 font-medium rounded-lg px-5 text-sm lg:px-5 py-2 lg:py-2.5 dark:hover:bg-sky-300 focus:outline-none dark:focus:ring-gray-800">

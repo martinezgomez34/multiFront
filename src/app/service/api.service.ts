@@ -8,7 +8,7 @@ import { throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:8000'; // URL del backend de FastAPI
+  private apiUrl = 'http://localhost:8000';
 
   constructor(private http: HttpClient) {}
 
@@ -91,6 +91,15 @@ export class ApiService {
   // Obtener donante por correo electrónico
   getDonorByEmail(email: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/donor/${email}`).pipe(
+      catchError((error) => {
+        console.error('Error al obtener donante', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  getCenterByEmail(email: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/center/${email}`).pipe(
       catchError((error) => {
         console.error('Error al obtener donante', error);
         return throwError(() => error);

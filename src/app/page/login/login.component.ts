@@ -10,6 +10,7 @@ import { StateService } from '../../service/state.service';
 import { Donor } from '../../models/donor';
 import { Center } from '../../models/center';
 import { User } from '../../models/user/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +33,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
-    private stateService: StateService
+    private stateService: StateService,
+    private router: Router,
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -43,37 +45,41 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      this.apiService.loginUser(email, password).subscribe(response => {
-        console.log('Login successful:', response);
-  
-        if (response && response.access_token) {
-          // Si el login es exitoso, obtener información del usuario
-          this.apiService.getUserByEmail(email).subscribe(user => {
-            console.log('User fetched:', user);
-  
-            if (user) {
-              // Verifica si el usuario es un Donor o Center
-              if ('last_name' in user.user) {
-                // Si tiene 'last_name', es un Donor
-                this.stateService.setUser(user.user as Donor);
-              } else if ('contact' in user.user) {
-                // Si tiene 'contact', es un Center
-                this.stateService.setUser(user.user as Center);
-              } else {
-                // Es un usuario general
-                this.stateService.setUser(user.user as User);
+      this.apiService.loginUser(email, password).subscribe(
+        (response) => {
+          if (response && response.access_token) {
+            this.apiService.getUserByEmail(email).subscribe(
+              (user) => {
+                if (user) {
+                  if ('last_name' in user.user) {
+                    this.stateService.setUser(user.user as Donor);
+                  } else if ('contact' in user.user) {
+                    this.stateService.setUser(user.user as Center);
+                  } else {
+                    this.stateService.setUser(user.user as User);
+                  }
+                  alert('¡Inicio de sesión exitoso!');
+                  this.router.navigate(['']);
+                }
+              },
+              (error) => {
+                console.error('Error fetching user:', error);
               }
-            } else {
-              console.error('El usuario no tiene "user_name" o está indefinido:', user);
-            }
-          }, error => {
-            console.error('Error fetching user:', error);
-          });
+            );
+          }
+        },
+        (error) => {
+          console.error('Login error:', error);
+          if (error.status === 401 && error.error.detail === 'Contraseña incorrecta') {
+            alert('La contraseña ingresada es incorrecta. Por favor, verifica e intenta nuevamente.');
+          } else if (error.status === 401) {
+            alert('Credenciales incorrectas. Verifica tu correo electrónico o contraseña.');
+          } else {
+            alert('Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde.');
+          }
         }
-      }, error => {
-        console.error('Login error:', error);
-      });
+      );
     }
-  }
+  }  
   
 }
