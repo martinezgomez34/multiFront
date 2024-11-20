@@ -8,10 +8,22 @@
                 
                 <div class="flex items-center lg:order-2 ">
                     <app-darkmode-button [isDarkMode]="isDarkMode" (darkModeToggled)="toggleDarkMode($event)"></app-darkmode-button>                     
-                    <a routerLink="Login"
-                    class="hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-900 font-medium rounded-lg px-5 text-sm lg:px-5 py-2 lg:py-2.5
-                     dark:hover:bg-sky-300 focus:outline-none dark:focus:ring-gray-800 ">Login</a>
-                    
+
+                    <ng-container *ngIf="stateService.isAuthenticated(); else loginLink">
+                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ stateService.User().user_name }}</span>
+                        <button 
+  (click)="logout()" 
+  class="ml-4 px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm">
+  Cerrar Sesión
+</button>
+
+                    </ng-container>
+                      <ng-template #loginLink>
+                        <a routerLink="Login" class="hover:text-gray-900 dark:text-gray-200 font-medium rounded-lg px-5 text-sm lg:px-5 py-2 lg:py-2.5 dark:hover:bg-sky-300 focus:outline-none dark:focus:ring-gray-800">
+                          Login
+                        </a>
+                      </ng-template>
+
                     <button 
                     (click)="showMenu = !showMenu"
                     class="inline-flex items-center p-4 text-sm text-gray-800 rounded-lg lg:hidden hover:bg-gray-100
@@ -25,22 +37,22 @@
                 <div 
                 [ngClass]="{'max-h-96 transition-max-height duration-500 ease-in-out': showMenu, 'max-h-0 overflow-hidden': !showMenu}"  
                 class="justify-between items-center w-full lg:flex lg:w-auto lg:order-1 lg:max-h-none lg:overflow-visible">
-                <nav class="sm:flex items-center justify-center text-base md:ml-auto">
-                    <ul class="flex sm:flex-row flex-col items-end text-base text-gray-800 py-4 px-6">
+                <nav class="flex sm:flex items-center justify-center text-base md:ml-auto">
+                    <ul class="sm:flex-row flex-col items-center text-base text-gray-800 py-4 px-6">
                     <a routerLink="" 
-                    class="sm:mr-20 p-2 hover:text-gray-900 dark:text-gray-200 lg:border-0 lg:hover:text-blue-700 lg:p-0
+                    class="sm:mr-20 p-4 hover:text-gray-900 dark:text-gray-200 lg:border-0 lg:hover:text-blue-700 lg:p-0
                      lg:dark:hover:text-sky-400 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">
                         Inicio</a>
                     <a routerLink="Center" 
-                    class="sm:mr-20 p-2 hover:text-gray-900 dark:text-gray-200 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0
+                    class="sm:mr-20 p-4 hover:text-gray-900 dark:text-gray-200 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0
                      lg:dark:hover:text-sky-400 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">
                         Centros</a>
                     <a routerLink="Donate" 
-                    class="sm:mr-20 p-2 hover:text-gray-900 dark:text-gray-200 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0
+                    class="sm:mr-20 p-4 hover:text-gray-900 dark:text-gray-200 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0
                      lg:dark:hover:text-sky-400 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">
                         Donar</a>
                     <a routerLink="Ranking" 
-                    class="p-2 hover:text-gray-900 dark:text-gray-200 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0
+                    class="p-4 hover:text-gray-900 dark:text-gray-200 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0
                      lg:dark:hover:text-sky-400 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">
                         Ranking</a>
                     </ul>
