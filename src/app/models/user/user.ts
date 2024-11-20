@@ -7,4 +7,14 @@ export interface User {
     is_admin:boolean;
     image:string
     is_sponsor: boolean
+  }
+  
+export interface donor {
+  id?: number;
+  user_name: string;
+  last_name: string;
+  email: string;
+  password : string;
+  phone_number: string;
+  image?: File
 }
