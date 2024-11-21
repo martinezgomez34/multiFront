@@ -30,11 +30,27 @@
                type="password" id="password" placeholder="Contraseña" required>
       </div>
 
+      <div class="w-full mb-6">
+        <label class="block text-sm text-black mb-2" for="phone_number"></label>
+        <input formControlName="phone_number" 
+               class="w-full px-6 py-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:bg-sky-100" 
+               type="text" id="number" placeholder="Numero telefonico" required>
+      </div>
+
+      <div class="w-full mb-6">
+        <label class="block text-sm text-black mb-2" for="image"></label>
+        <input type="file" 
+               id="image" 
+               (change)="onFileSelected($event)" 
+               class="w-full px-6 py-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:bg-sky-100" 
+               accept="image/*">
+      </div>
+      
       <div class="w-full flex justify-center mb-6">
         <button type="submit" class="px-14 py-3 text-white font-light tracking-wider bg-cyan-600 hover:bg-gray-800 rounded-lg">
           Registrar
         </button>
-      
+      <a routerLink="/rescenter">center</a>
       </div>
     </form>
   </div>

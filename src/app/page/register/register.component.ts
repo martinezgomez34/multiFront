@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../service/api.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -14,36 +15,51 @@ import { ApiService } from '../../service/api.service';
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    RouterLink
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
   form: FormGroup;
-
+  selectedFile: File | null = null;
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService
   ) {
     this.form = this.fb.group({
-      name: ['', Validators.required], 
+      name: ['', Validators.required],
       lastname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]], 
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+      phone_number: ['', Validators.required], // Asegúrate de que esta línea exista
     });
+    
+  }
+
+  onFileSelected(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length > 0) {
+      this.selectedFile = fileInput.files[0];
+    }
   }
 
   onSubmit(): void {
     if (this.form.valid) {
-      this.apiService.createUser(this.form.value).subscribe(user => {
-        console.log('Login successful:', user);
-      }, error => {
-        console.error('Error creating user', error);
-      });
+      const donorData = { ...this.form.value, image: this.selectedFile };
+      this.apiService.registerDon(donorData).subscribe(
+        response => {
+          console.log('Usuario registrado exitosamente:', response);
+        },
+        error => {
+          console.error('Error al registrar usuario:', error);
+        }
+      );
     }
   }
 
+  
   onCancel(): void {
   }
 }
