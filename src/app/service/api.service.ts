@@ -48,28 +48,6 @@ export class ApiService {
     );
   }
 
-  // Registrar centro
-  registerCenter(center: any): Observable<any> {
-    const formData = new FormData();
-    formData.append('user_name', center.user_name);
-    formData.append('email', center.email);
-    formData.append('password', center.password);
-    formData.append('type_center', center.type_center);
-    formData.append('needs', center.needs || '');
-    formData.append('contact_phone_number', center.contact_phone_number);
-    formData.append('contact_social_media', center.contact_social_media);
-    formData.append('contact_others', center.contact_others || '');
-    formData.append('address', center.address);
-    formData.append('image', center.image);
-
-    return this.http.post(`${this.apiUrl}/registerCen`, formData).pipe(
-      catchError((error) => {
-        console.error('Error al registrar centro', error);
-        return throwError(() => error);
-      })
-    );
-  }
-
   // Login de usuario
   loginUser(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
