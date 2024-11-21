@@ -10,7 +10,7 @@ import { error } from 'node:console';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:8000';
+  private apiUrl = 'http://127.0.0.1:8000';
 
   constructor(private http: HttpClient) {}
 
@@ -137,5 +137,24 @@ export class ApiService {
     );
   }
   
+  registerCenter(formData:any):Observable<any>{
+    return this.http.post(`${this.apiUrl}/registerCen`, formData).pipe(
+      catchError(error => {
+        console.error('No se pudo registrar el centro', error);
+        return throwError(() => error);
+      })
+    );
+  }
+  getCenters(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/centers`);
+  }
+  getCentersComunity(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/centers/comunity`);
+  }
+  getCentersBank(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/centers/bank`);
+  }
+  getCentersChildren(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/centers/shelters`);
+  }
 }
-
