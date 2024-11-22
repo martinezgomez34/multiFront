@@ -17,5 +17,4 @@ import { CommonModule } from '@angular/common';
 })
 export class MainComponent {
   @Input() isDarkMode!: boolean;
-
 }
