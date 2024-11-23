@@ -7,7 +7,7 @@ export interface User {
     is_admin:boolean;
     image:string
     is_sponsor: boolean
-  }
+}
   
 export interface donor {
   id?: number;

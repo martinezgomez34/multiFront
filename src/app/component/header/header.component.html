@@ -2,21 +2,15 @@
     <div [ngClass]="{'dark': isDarkMode}">
         <nav class="bg-white border-b-2 border-y-gray-300 dark:border-y-black/90 dark:bg-black/90">
             <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-                <a href="" class="flex items-center p-8"> <!-- p-4 para agregar espacio alrededor del contenido -->
+                <a href="" class="flex items-center p-5"> <!-- p-4 para agregar espacio alrededor del contenido -->
                     <app-logo [isDarkMode]="isDarkMode"></app-logo>
                 </a>
                 
-                <div class="flex items-center lg:order-2 ">
+                <div class="flex items-center lg:order-2">
                     <app-darkmode-button [isDarkMode]="isDarkMode" (darkModeToggled)="toggleDarkMode($event)"></app-darkmode-button>                     
 
                     <ng-container *ngIf="stateService.isAuthenticated(); else loginLink">
-                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ stateService.User().user_name }}</span>
-                        <button 
-  (click)="logout()" 
-  class="ml-4 px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm">
-  Cerrar Sesión
-</button>
-
+                        <app-menu></app-menu>
                     </ng-container>
                       <ng-template #loginLink>
                         <a routerLink="Login" class="hover:text-gray-900 dark:text-gray-200 font-medium rounded-lg px-5 text-sm lg:px-5 py-2 lg:py-2.5 dark:hover:bg-sky-300 focus:outline-none dark:focus:ring-gray-800">

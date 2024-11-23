@@ -41,7 +41,7 @@ export class LoginComponent {
       password: ['', Validators.required]
     });
   }
-  
+
   onSubmit(): void {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
@@ -51,12 +51,13 @@ export class LoginComponent {
             this.apiService.getUserByEmail(email).subscribe(
               (user) => {
                 if (user) {
+                  const userType = response.user_type || 'user'; // Asegúrate de que recibas el tipo de usuario
                   if ('last_name' in user.user) {
-                    this.stateService.setUser(user.user as Donor);
-                  } else if ('contact' in user.user) {
-                    this.stateService.setUser(user.user as Center);
+                    this.stateService.setUser(user.user as Donor, userType);
+                  } else if ('type_center' in user.user) {
+                    this.stateService.setUser(user.user as Center, userType);
                   } else {
-                    this.stateService.setUser(user.user as User);
+                    this.stateService.setUser(user.user as User, userType);
                   }
                   alert('¡Inicio de sesión exitoso!');
                   this.router.navigate(['']);
@@ -81,5 +82,4 @@ export class LoginComponent {
       );
     }
   }  
-  
 }
