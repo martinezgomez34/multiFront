@@ -7,6 +7,7 @@ import { LocalStorageService } from './local-storage.service';
 export interface UserState {
   User: User | Donor | Center; 
   isAuthenticated: boolean;
+  user_type: string; // Identificador del tipo de usuario
 }
 
 @Injectable({
@@ -23,40 +24,39 @@ export class StateService {
       image: '',
       is_sponsor: false
     },
-    isAuthenticated: false
+    isAuthenticated: false,
+    user_type: '' // Inicialmente vacío
   });
 
   readonly User = computed(() => this._state().User);
   readonly isAuthenticated = computed(() => this._state().isAuthenticated);
+  readonly userType = computed(() => this._state().user_type); // Computed para user_type
 
   constructor(private localStorageService: LocalStorageService) {
     const savedUser = this.localStorageService.getUser<User | Donor | Center>();
     if (savedUser) {
+      const userType = this.determineUserType(savedUser);
       this._state.update((state) => ({
         ...state,
         User: savedUser,
-        isAuthenticated: true
+        isAuthenticated: true,
+        user_type: userType
       }));
     }
   }
 
-  setUser(user: User | Donor | Center): void {
-    if (!user.user_name) {
-      console.error('El user_name no está definido');
-      return; 
-    }
-
+  setUser(user: User | Donor | Center, userType: string): void {
     this._state.update((state) => {
       const updatedState = {
         ...state,
         User: user,
-        isAuthenticated: true
+        isAuthenticated: true,
+        user_type: userType
       };
       console.log('Updating state:', updatedState); 
-      this.localStorageService.setUser(user)
+      this.localStorageService.setUser(user);
       return updatedState;
     });
-    
   }
 
   logout(): void {
@@ -65,7 +65,7 @@ export class StateService {
       return {
         ...state,
         User: {
-          user_name: '', // Limpia el nombre de usuario
+          user_name: '',
           email: '',
           password: '',
           is_verified: false,
@@ -73,9 +73,36 @@ export class StateService {
           image: '',
           is_sponsor: false
         },
-        isAuthenticated: false
+        isAuthenticated: false,
+        user_type: '' // Limpiar tipo de usuario
       };
     });
   }
+
+  private determineUserType(user: User | Donor | Center): string {
+    if ('type_center' in user) {
+      return 'center';
+    } else if ('is_sponsor' in user) {
+      return 'donor';
+    } else {
+      return 'user';
+    }
+  }
+
+  isDonor(): boolean {
+    const user = this.User();
+    return user && 'is_sponsor' in user ? user.is_sponsor === true : false;
+  }
+  
+  isCenter(): boolean {
+    const user = this.User();
+    return user && 'type_center' in user ? user.type_center !== undefined : false;
+  }
+  
+  isRegularUser(): boolean {
+    const user = this.User();
+    return user && 'is_verified' in user ? user.is_verified !== undefined : false;
+  }
+  
   
 }

@@ -6,6 +6,7 @@ import { DarkmodeButtonComponent } from '../button/darkmode-button/darkmode-butt
 import { LogoComponent } from "../logo/logo.component";
 import { StateService } from '../../service/state.service';
 import { Router } from '@angular/router';
+import { MenuComponent } from '../menu/menu.component';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +16,8 @@ import { Router } from '@angular/router';
     CommonModule,
     MatIconModule,
     DarkmodeButtonComponent,
-    LogoComponent
+    LogoComponent,
+    MenuComponent
 ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

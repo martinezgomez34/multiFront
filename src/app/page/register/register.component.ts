@@ -29,8 +29,8 @@ export class RegisterComponent {
     private apiService: ApiService
   ) {
     this.form = this.fb.group({
-      name: ['', Validators.required],
-      lastname: ['', Validators.required],
+      user_name: ['', Validators.required],
+      last_name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       phone_number: ['', Validators.required], // Asegúrate de que esta línea exista
