@@ -7,7 +7,7 @@ import { LocalStorageService } from './local-storage.service';
 export interface UserState {
   User: User | Donor | Center; 
   isAuthenticated: boolean;
-  user_type: string; // Identificador del tipo de usuario
+  user_type: string;
 }
 
 @Injectable({
@@ -34,13 +34,13 @@ export class StateService {
 
   constructor(private localStorageService: LocalStorageService) {
     const savedUser = this.localStorageService.getUser<User | Donor | Center>();
-    if (savedUser) {
-      const userType = this.determineUserType(savedUser);
+    const savedUserType = this.localStorageService.getUserType();
+    if (savedUser && savedUserType) {
       this._state.update((state) => ({
         ...state,
         User: savedUser,
         isAuthenticated: true,
-        user_type: userType
+        user_type: savedUserType
       }));
     }
   }
@@ -54,7 +54,8 @@ export class StateService {
         user_type: userType
       };
       console.log('Updating state:', updatedState); 
-      this.localStorageService.setUser(user);
+      this.localStorageService.setUser(user)
+      this.localStorageService.setUserType(userType)
       return updatedState;
     });
   }

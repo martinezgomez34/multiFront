@@ -6,7 +6,7 @@
       [attr.aria-expanded]="menuOpen ? 'true' : 'false'"
     >
       <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
-        {{ stateService.User()?.user_name || 'Usuario' }}
+        {{ stateService.User().user_name || 'Usuario' }}
       </span>
       <svg
         class="h-5 w-5 ml-2"
@@ -27,32 +27,32 @@
     <div
       *ngIf="menuOpen"
       (click)="closeMenu()"
-      class="text-gray-700 text-center dark:text-gray-200 origin-top-left absolute left-0 mt-2 w-34 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 px-2 py-2"
+      class="text-gray-700 text-center dark:text-gray-200 origin-top-left absolute mt-2 w-34 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 px-2 py-2"
     >
       <!-- Opciones Condicionales -->
       <ng-container *ngIf="isDonor()">
-        <a
-          routerLink="Donations"
-          class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md"
-        >
+        <a routerLink="Donations" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
           Mis Donaciones
         </a>
       </ng-container>
 
       <ng-container *ngIf="isCenter()">
-        <a
-          routerLink="CenterDetails"
-          class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md"
-        >
-          Detalles del Centro
+        <a routerLink="CenterMyNew" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+          Mis Noticias
+        </a>
+        <a routerLink="CenterNeeds" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+          Necesidades
+        </a>
+        <a routerLink="CenterInformation" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+          Informacion
+        </a>
+        <a routerLink="CenterInformation" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+          Inventario
         </a>
       </ng-container>
 
       <ng-container *ngIf="isRegularUser()">
-        <a
-          routerLink="Profile"
-          class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md"
-        >
+        <a routerLink="Profile" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
           Mi Perfil
         </a>
         <a
@@ -67,9 +67,9 @@
       <!-- Cerrar sesión -->
       <button
         (click)="logout()"
-        class="block px-4 py-2 text-sm text-gray-700 hover:bg-cyan-500 rounded-md"
+        class=" px-10 py-2 text-sm dark:text-gray-700 hover:bg-cyan-500 rounded-md"
       >
-        Cerrar Sesión
+        Salir
       </button>
     </div>
   </div>
