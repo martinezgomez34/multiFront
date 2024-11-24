@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { donor, User } from '../models/user/user';
-import { catchError } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { donor, User, NewsItem } from '../models/user/user';
+import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { error } from 'node:console';
 
@@ -63,5 +63,22 @@ export class ApiService {
   }
   getCentersChildren(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/centers/shelters`);
+  }
+  getNewsS(): Observable<any[]> {
+    return this.http.get<any>('http://127.0.0.1:8000/news/secret').pipe(
+      map((response) => {
+        if (response && Array.isArray(response.data)) {
+          return response.data.map((item: any) => item.image);
+        } else if (Array.isArray(response)) {
+          return response.map((item: any) => item.imageUrl || item.image);
+        } else {
+          return [];
+        }
+      }),
+      catchError((error) => {
+        console.error('Error fetching images:', error);
+        return of([]); 
+      })
+    );
   }
 }
