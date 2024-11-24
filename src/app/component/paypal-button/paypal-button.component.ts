@@ -13,7 +13,6 @@ export class PaypalButtonComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (typeof window === 'undefined' || typeof document === 'undefined') {
-      console.warn('El entorno no es adecuado para ejecutar el código de PayPal');
       return;
     }
   
