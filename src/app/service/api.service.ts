@@ -5,6 +5,8 @@ import { donor, User } from '../models/user/user';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { error } from 'node:console';
+import { Resource } from '../models/resource';
+import { News } from '../models/news';
 
 @Injectable({
   providedIn: 'root',
