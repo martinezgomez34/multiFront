@@ -41,7 +41,6 @@ export class LoginComponent {
       password: ['', Validators.required]
     });
   }
-
   onSubmit(): void {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
@@ -51,20 +50,28 @@ export class LoginComponent {
             this.apiService.getUserByEmail(email).subscribe(
               (user) => {
                 if (user) {
-                  const userType = response.user_type || 'user'; // Asegúrate de que recibas el tipo de usuario
-                  if ('last_name' in user.user) {
-                    this.stateService.setUser(user.user as Donor, userType);
-                  } else if ('type_center' in user.user) {
-                    this.stateService.setUser(user.user as Center, userType);
+                  // Asegúrate de que recibes el tipo de usuario
+                  const userType = response.user_type || 'user'; 
+  
+                  // Determina el tipo de usuario basado en las propiedades del objeto 'user'
+                  if ('is_sponsor' in user) {
+                    // Si el usuario tiene la propiedad 'is_sponsor', lo tratamos como Donor
+                    this.stateService.setUser(user as Donor, userType);
+                  } else if ('type_center' in user) {
+                    // Si el usuario tiene la propiedad 'type_center', lo tratamos como Center
+                    this.stateService.setUser(user as Center, userType);
                   } else {
-                    this.stateService.setUser(user.user as User, userType);
+                    // Si no coincide con los anteriores, lo tratamos como User
+                    this.stateService.setUser(user as User, userType);
                   }
+  
                   alert('¡Inicio de sesión exitoso!');
                   this.router.navigate(['']);
                 }
               },
               (error) => {
                 console.error('Error fetching user:', error);
+                alert('No se pudo obtener los datos del usuario. Inténtalo de nuevo.');
               }
             );
           }
@@ -81,5 +88,6 @@ export class LoginComponent {
         }
       );
     }
-  }  
+  }
+  
 }

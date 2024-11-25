@@ -3,6 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './component/header/header.component';
 import { FooterComponent } from './component/footer/footer.component';
 import { CommonModule } from '@angular/common';
+import { StateService } from './service/state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -24,4 +26,28 @@ export class AppComponent {
   toggleDarkMode(isDark: boolean): void { 
     this.isDarkMode = isDark; 
   }
+
+  constructor(
+    private stateService: StateService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const token = this.stateService.getToken();  // Obtener el token almacenado
+      if (token) {
+        const decodedToken = this.stateService.decodeToken(token);
+        const expirationTime = decodedToken?.exp * 100; // Asegúrate de que `exp` exista
+  
+        // Verificar si el token ha expirado
+        if (expirationTime < Date.now()) {
+          // Si el token ha expirado, llamar al método logoutObservable y suscribirse a la respuesta
+          this.stateService.logoutObservable().subscribe(() => {
+            // Redirigir al login después de hacer logout
+            this.router.navigate(['/']);
+          });
+        }
+      }
+    }
+  }  
 }
