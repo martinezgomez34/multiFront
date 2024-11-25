@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { donor, User } from '../models/user/user';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { error } from 'node:console';
 import { Resource } from '../models/resource';
 import { News } from '../models/news';
 
@@ -49,6 +48,27 @@ export class ApiService {
       })
     );
   }
+
+
+// Editar donante
+updateDonor(email: string, updatedDonor: any): Observable<any> {
+  const formData = new FormData();
+  formData.append('user_name', updatedDonor.user_name);
+  formData.append('last_name', updatedDonor.last_name);
+  formData.append('new_email', updatedDonor.email);  // Actualiza con el nuevo email si es necesario
+  formData.append('password', updatedDonor.password);
+  formData.append('phone_number', updatedDonor.phone_number);
+  if (updatedDonor.image) {
+    formData.append('image', updatedDonor.image, updatedDonor.image.name);
+  }
+
+  return this.http.put(`${this.apiUrl}/updateDonors/${email}`, formData).pipe(
+    catchError((error) => {
+      console.error('Error al actualizar donante', error);
+      return throwError(() => error);
+    })
+  );
+}
 
   // Login de usuario
   loginUser(email: string, password: string): Observable<any> {
@@ -98,6 +118,7 @@ export class ApiService {
       })
     );
   }
+
   registerDon(donor: donor): Observable<any> {
     const formData = new FormData();
     formData.append('user_name', donor.user_name);
@@ -108,7 +129,7 @@ export class ApiService {
     if (donor.image) {
       formData.append('image', donor.image, donor.image.name);
     }
-  
+
     return this.http.post(`${this.apiUrl}/registerDon`, formData).pipe(
       catchError(error => {
         console.error('No se pudo registrar el usuario', error);
@@ -116,7 +137,7 @@ export class ApiService {
       })
     );
   }
-  
+
   registerCenter(formData:any):Observable<any>{
     return this.http.post(`${this.apiUrl}/registerCen`, formData).pipe(
       catchError(error => {
@@ -125,16 +146,23 @@ export class ApiService {
       })
     );
   }
+
   getCenters(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/centers`);
   }
+
   getCentersComunity(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/centers/comunity`);
   }
+
   getCentersBank(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/centers/bank`);
   }
+
   getCentersChildren(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/centers/shelters`);
   }
 }
+
+
+
