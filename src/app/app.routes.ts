@@ -39,7 +39,7 @@ export const routes: Routes = [
         component: RegisterComponent
     },
     {
-        path: 'Donate/DonateForm',
+        path: 'Donate/DonateForm/:user_name/:need_type',
         component: DonateFormComponent
     },
     {
