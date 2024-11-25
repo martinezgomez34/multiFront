@@ -154,4 +154,39 @@ export class ApiService {
       })
     );
   }
+  getComunityNeeds(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/comunityNeeds`);
+  }
+
+  getFoodBankNeeds(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/bankNeeds`);
+  }
+
+  getSheltersNeeds(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/sheltersNeeds`);
+  }
+
+  // Métodos con filtros explícitos
+  getComunityNeedsWithFilters(needType: string, urgent: boolean): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/comunityNeeds/${needType}/${urgent}`);
+  }
+
+  getFoodBankNeedsWithFilters(needType: string, urgent: boolean): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/bankNeeds/${needType}/${urgent}`);
+  }
+
+  getSheltersNeedsWithFilters(needType: string, urgent: boolean): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/sheltersNeeds/${needType}/${urgent}`);
+  }
+  getCenterByName(centerName: string): Observable<any> {
+    const url = `${this.apiUrl}/centerName/${centerName}`;
+    return this.http.get<any>(url);
+  }
+  getNeedsByUserNameAndType(userName: string, typeNeed: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/getNeedsbyNT/${userName}/${typeNeed}`);
+  }
+  registerDonation(donorId: number, needId: number, formData: FormData): Observable<any> {
+    const apiUrl = `http://127.0.0.1:8000/registerDonation/${donorId}/${needId}`;
+    return this.http.post<any>(apiUrl, formData);
+  }  
 }
