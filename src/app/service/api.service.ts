@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { donor, User } from '../models/user/user';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { error } from 'node:console';
-import { Resource } from '../models/resource';
-import { News } from '../models/news';
 
 @Injectable({
   providedIn: 'root',
@@ -88,7 +85,6 @@ export class ApiService {
       })
     );
   }
-
   // Eliminar usuario por correo electrónico
   deleteUser(email: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/deleteUser/${email}`).pipe(
@@ -136,5 +132,65 @@ export class ApiService {
   }
   getCentersChildren(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/centers/shelters`);
+  }
+
+  registerNeed(need: any, center_fk: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('type_need', need.type_need);
+    formData.append('amount_required', need.amount_required.toString());
+    formData.append('urgency', need.urgency.toString());
+
+    return this.http.post(`${this.apiUrl}/registerNeed/${center_fk}`, formData).pipe(
+      catchError((error) => this.handleError(error))
+    );
+  }
+
+  updateNeed(need_id: number, need: any): Observable<any> {
+    const formData = new FormData();
+    if (need.type_need) {
+      formData.append('type_need', need.type_need);
+    }
+    if (need.amount_required !== undefined) {
+      formData.append('amount_required', need.amount_required.toString());
+    }
+    if (need.complete !== undefined) {
+      formData.append('complete', need.complete.toString());
+    }
+    if (need.urgency !== undefined) {
+      formData.append('urgency', need.urgency.toString());
+    }
+
+    return this.http.put(`${this.apiUrl}/updateNeed/${need_id}`, formData).pipe(
+      catchError((error) => this.handleError(error))
+    );
+  }
+
+  deleteNeed(need_id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/deleteNeed/${need_id}`).pipe(
+      catchError((error) => this.handleError(error))
+    );
+  }
+
+  getAllNeeds(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/getNeeds`).pipe(
+      catchError((error) => this.handleError(error))
+    );
+  }
+
+  getNeedById(need_id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/getNeeds/${need_id}`).pipe(
+      catchError((error) => this.handleError(error))
+    );
+  }
+
+  getNeedsByCenterName(center_name: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/getNeedsbyName/${center_name}`).pipe(
+      catchError((error) => this.handleError(error))
+    );
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    console.error('An error occurred:', error.error);
+    return throwError(() => new Error('Something went wrong; please try again later.'));
   }
 }

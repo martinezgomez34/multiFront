@@ -10,6 +10,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule} from '@angular/router';
 import { RegisterCenComponent } from './page/register-cen/register-cen.component';
 import { VerifyemailComponent } from './page/verifyemail/verifyemail.component';
+import { NeedsComponent } from './page/needs/needs.component';
+import { NewsComponent } from './page/news/news.component';
 
 export const routes: Routes = [
     {
@@ -47,5 +49,13 @@ export const routes: Routes = [
     {
         path: 'verify_email',
         component:VerifyemailComponent
+    },
+    {
+        path: 'Needs',
+        component:NeedsComponent
+    },
+    {
+        path: 'NewsCenter',
+        component:NewsComponent
     },
 ];

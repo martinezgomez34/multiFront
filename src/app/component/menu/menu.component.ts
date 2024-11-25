@@ -7,7 +7,10 @@ import { StateService } from '../../service/state.service';
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [
+    CommonModule, 
+    RouterLink
+  ],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })
