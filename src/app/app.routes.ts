@@ -10,8 +10,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule} from '@angular/router';
 import { RegisterCenComponent } from './page/register-cen/register-cen.component';
 import { VerifyemailComponent } from './page/verifyemail/verifyemail.component';
+
 import { NeedsComponent } from './page/needs/needs.component';
 import { NewsComponent } from './page/news/news.component';
+
+import { EditDonorComponent } from './page/edit-donor/edit-donor.component';
+
+
 
 export const routes: Routes = [
     {
@@ -39,7 +44,7 @@ export const routes: Routes = [
         component: RegisterComponent
     },
     {
-        path: 'Donate/DonateForm',
+        path: 'Donate/DonateForm/:user_name/:need_type',
         component: DonateFormComponent
     },
     {
@@ -58,4 +63,8 @@ export const routes: Routes = [
         path: 'NewsCenter',
         component:NewsComponent
     },
+    {
+        path: 'edit-donor',
+        component:EditDonorComponent
+    }
 ];
