@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../service/api.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-donor',
   standalone: true, 
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './edit-donor.component.html',
   styleUrls: ['./edit-donor.component.scss'],
 })
@@ -21,6 +22,9 @@ export class EditDonorComponent {
   };
 
   selectedImage: File | null = null;
+
+  // Propiedad para manejar el modo oscuro
+  isDarkMode: boolean = false;
 
   constructor(
     private apiService: ApiService,
@@ -39,10 +43,9 @@ export class EditDonorComponent {
         error: (err) => {
             console.error('Error al obtener los datos del donante:', err);
         },
-    });
+      });
     }
   }
-  
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
@@ -53,7 +56,6 @@ export class EditDonorComponent {
       console.log('Imagen existente:', this.donor.image);
     }
   }
-  
 
   updateDonor(): void {
     const updatedDonor = { ...this.donor };
@@ -72,5 +74,10 @@ export class EditDonorComponent {
         alert('Error al actualizar el donante');
       },
     });
+  }
+
+  // Método para alternar entre el modo oscuro y claro
+  toggleDarkMode(): void {
+    this.isDarkMode = !this.isDarkMode;
   }
 }
