@@ -2,28 +2,32 @@
     <div class="container mx-auto px-4 py-8">
 
         <section class="mb-8">
-          <h1 class="text-3xl font-bold mb-2">Centros de ayuda</h1>
-          <p class="text-gray-600">Aquí puedes encontrar centros de ayuda en los que confiamos 
+          <h1 class="text-3xl font-bold mb-2 dark:text-white">Centros de ayuda</h1>
+          <p class="text-gray-600 dark:text-white/55">Aquí puedes encontrar centros de ayuda en los que confiamos 
             y que están comprometidos a hacer llegar tus donaciones a quienes más lo necesitan. 
             Sabemos lo importante que es apoyar a quienes realmente hacen la diferencia.</p>
         </section>
       
-        <nav class="flex justify-center space-x-12 border-b pb-2 mb-8">
+        <nav class="flex justify-center space-x-12 pb-2 mb-8">
           <button
             *ngFor="let category of categories"
             (click)="loadCenters(category.method)"
             [class.border-teal-400]="activeCategory === category.name"
-            class="text-gray-700 pb-2 hover:border-teal-400 border-transparent border-b-2"
+            class="pb-2 border-b-2"
+            [ngClass]="{
+              'text-teal-500 border-teal-500': activeCategory === category.name,
+              'text-gray-700 dark:text-white/80 border-transparent': activeCategory !== category.name
+            }"
           >
             {{ category.name }}
           </button>
         </nav>
         
-        <section class="space-y-4 max-w-5xl mx-auto border rounded-lg p-6">
+        <section class="space-y-4 max-w-5xl mx-auto p-6">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div
               *ngFor="let center of centers"
-              class="relative border rounded-lg p-6 flex flex-col sm:flex-row gap-6 sm:gap-8 bg-gradient-to-t from-gray-100/50"
+              class="relative p-6 flex flex-col sm:flex-row gap-6 sm:gap-8 bg-gradient-to-t from-gray-100/10"
             >
               <!-- Logo e información del centro -->
               <div class="flex flex-col items-center sm:items-start">
@@ -31,34 +35,27 @@
               </div>
               <!-- Detalles del centro -->
               <div class="flex-1 text-center sm:text-left my-4 flex flex-col justify-center">
-                <p class="text-2xl text-gray-900">{{ center.name }}</p>
-                <p class="text-gray-500">Ubicación: {{ center.address }}</p>
+                <p class="text-2xl text-gray-900 dark:text-white/80">{{ center.name | titlecase }}</p>
+                <p class="text-gray-500 dark:text-white/60">Ubicación: {{ center.address }}</p>
               </div>
             </div>
           </div>
         </section>
-        
-        
-        
-      
+
         <section class="text-center mb-8">
-          <h2 class="text-2xl font-bold mb-2">Patrocinadores</h2>
-          <p class="text-gray-600">Texto hablando sobre cómo nuestros patrocinadores nos ayudan a enviarles más recursos a los centros</p>
-      
+          <h2 class="text-2xl font-bold mb-2 dark:text-white/90">Patrocinadores</h2>
+          <p class="text-gray-600">
+            Reconocimiento a aquellos usuarios que ayudan a que esto sea posible y podamos llegar a más personas.
+          </p>
+        
           <div class="flex justify-center space-x-8 mt-4">
-            <div class="text-center">
-              <div class="w-16 h-16 bg-gray-300 rounded-full mx-auto mb-2"></div>
-              <p class="text-gray-600">nombre1</p>
-            </div>
-            <div class="text-center">
-              <div class="w-16 h-16 bg-gray-300 rounded-full mx-auto mb-2"></div>
-              <p class="text-gray-600">nombre2</p>
-            </div>
-            <div class="text-center">
-              <div class="w-16 h-16 bg-gray-300 rounded-full mx-auto mb-2"></div>
-              <p class="text-gray-600">nombre3</p>
+            <div *ngFor="let sponsor of sponsors" class="text-center">
+              <div class="flex flex-col items-center sm:items-start">
+                <img [src]="sponsor.images" class="h-16 w-16 object-cover rounded-full" alt="Logo" />
+              </div>
+              <p class="text-gray-600 dark:text-white/60">{{ sponsor.user_name }}</p>
             </div>
           </div>
-        </section>
+        </section>             
     </div>
 </div>

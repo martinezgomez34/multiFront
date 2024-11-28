@@ -9,28 +9,28 @@
 <nav class="flex justify-between items-center pb-2 mb-8">
   <div class="flex justify-center space-x-12">
     <button
-      class="pb-2 border-b-2 dark:text-white/80"
+      class="pb-2 border-b-2"
       [ngClass]="{
         'text-teal-500 border-teal-500': selectedType === 'comunityNeeds',
-        'text-gray-700 border-transparent': selectedType !== 'comunityNeeds'
+        'text-gray-700 dark:text-white/80 border-transparent': selectedType !== 'comunityNeeds'
       }"
       (click)="selectType('comunityNeeds')">
       Centros comunitarios
     </button>
     <button
-      class="pb-2 border-b-2 dark:text-white/80"
+      class="pb-2 border-b-2"
       [ngClass]="{
         'text-teal-500 border-teal-500': selectedType === 'bankNeeds',
-        'text-gray-700 border-transparent': selectedType !== 'bankNeeds'
+        'text-gray-700 dark:text-white/80 border-transparent': selectedType !== 'bankNeeds'
       }"
       (click)="selectType('bankNeeds')">
       Bancos de alimentos
     </button>
     <button
-      class="pb-2 border-b-2 dark:text-white/80"
+      class="pb-2 border-b-2"
       [ngClass]="{
         'text-teal-500 border-teal-500': selectedType === 'sheltersNeeds',
-        'text-gray-700 border-transparent': selectedType !== 'sheltersNeeds'
+        'text-gray-700 dark:text-white/80 border-transparent': selectedType !== 'sheltersNeeds'
       }"
       (click)="selectType('sheltersNeeds')">
       Casas hogares
@@ -131,7 +131,7 @@
   </div>
   <div 
   *ngIf="errorMessage" 
-  class="text-center py-8 text-red-500 dark:text-red-400 bg-white dark:bg-black/90"
+  class="text-center py-8 text-red-500 dark:text-red-400 bg-white dark:bg-black/40"
 >
   {{ errorMessage }}
 </div>

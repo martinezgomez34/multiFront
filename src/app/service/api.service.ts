@@ -218,4 +218,7 @@ updateDonor(email: string, updatedDonor: any): Observable<any> {
   getRanking(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/donations/ranking`);
   } 
+  getTopSponsors(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/users/sponsors3`);
+  }
 }
