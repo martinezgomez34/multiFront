@@ -7,7 +7,9 @@ import { FormsModule } from '@angular/forms'; // Importa FormsModule
 import { ReactiveFormsModule } from '@angular/forms';
 import { PaypalButtonComponent } from '../../component/paypal-button/paypal-button.component';
 import { Translate2Pipe } from '../../pipe/translate2.pipe';
-
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ThanksyoumodalComponent } from '../../component/thanksyoumodal/thanksyoumodal.component';
+import { ModalOthersComponent } from '../../component/modal-others/modal-others.component';
 @Component({
   selector: 'app-donate-form',
   standalone: true,
@@ -25,6 +27,9 @@ export class DonateFormComponent implements OnInit {
   needIds: number[] = [];
   successMessage: string | null = null;
   showPaypalButton = false;
+  selectedFileName: string | null = null;
+  amountRequered: number | null = null;
+  debounceTimer: any;
 
   donationData = {
     type: '',
@@ -46,13 +51,25 @@ export class DonateFormComponent implements OnInit {
     image: null as File | null
   };  
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private stateService: StateService, private router: Router) {}
+  constructor(private dialog: MatDialog, private route: ActivatedRoute, private apiService: ApiService, private stateService: StateService, private router: Router) {}
 
   ngOnInit(): void {
     // Obtener el parámetro user_name de la URL
     this.route.paramMap.subscribe(params => {
       this.userName = params.get('user_name');
       this.needType = params.get('need_type');
+      const amountString = params.get('amound_requered');
+      this.amountRequered = amountString ? Number(amountString) : null;
+
+      if (this.amountRequered !== null) {
+      if (isNaN(this.amountRequered)) {
+        console.error('El parámetro "amound_requered" no es un número válido:', amountString);
+        this.amountRequered = null; 
+      }
+    }else{
+      console.error("La cantidad requerida es nula");
+      
+    }
       if (this.userName) {
         this.fetchCenterData(this.userName);
         this.fetchNeedsData(this.userName, this.needType || '');
@@ -68,12 +85,14 @@ export class DonateFormComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.donationData.image = input.files[0];
+      this.selectedFileName = input.files[0].name;
     }
   }
   onFileSelectedFood(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.foodData.image = input.files[0];
+      this.selectedFileName = input.files[0].name;
     }
   }
 
@@ -149,20 +168,18 @@ export class DonateFormComponent implements OnInit {
     this.apiService.registerDonation(this.donorId, needId, formData).subscribe({
       next: () => {
         this.successMessage = 'Donación registrada con éxito.';
-        console.log('Donación registrada correctamente.');
-  
-        // Limpiar los campos de la donación después de la donación exitosa
-        this.donationData = {
-          amount: 0,
-          commentary: '',
-          type: '',
-          size: '',
-          image: null
-        };
-        this.needIds = []; // Limpiar las necesidades
-  
-        // Redirigir a la ruta Donate
+        const dialogRef = this.openDialogOther(); 
+        dialogRef.afterClosed().subscribe(() => {
+          this.donationData = {
+            amount: 0,
+            commentary: '',
+            type: '',
+            size: '',
+            image: null
+          };
+        this.needIds = [];
         this.router.navigate(['/Donate']);
+        });
       },
       error: (error) => {
         console.error('Error al registrar la donación:', error);
@@ -201,7 +218,7 @@ export class DonateFormComponent implements OnInit {
   }
 
   // Verificar que la fecha de caducidad sea al menos 7 días después de hoy
-  const minExpiryDate = new Date(currentDate.setDate(currentDate.getDate() + 7)); // Sumar 7 días a la fecha actual
+  const minExpiryDate = new Date(currentDate.setDate(currentDate.getDate() + 6)); // Sumar 7 días a la fecha actual
   if (expiryDate < minExpiryDate) {
     this.errorMessage = 'La fecha de caducidad debe ser al menos 7 días después de la fecha actual.';
     return;
@@ -230,19 +247,18 @@ export class DonateFormComponent implements OnInit {
       next: () => {
         this.successMessage = 'Donación registrada con éxito.';
         console.log('Donación registrada correctamente.');
-
-        // Limpiar los campos de la donación después de la donación exitosa
-        this.foodData = {
+        const dialogRef = this.openDialogOther(); 
+      dialogRef.afterClosed().subscribe(() => {
+        this.moneyData = {
           amount: 0,
           commentary: '',
-          type: '',
-          expiryDate: '',
-          image: null
+          image: null,
         };
-        this.needIds = []; // Limpiar las necesidades
-
+        this.needIds = []; 
+  
         // Redirigir a la ruta Donate
         this.router.navigate(['/Donate']);
+      });
       },
       error: (error) => {
         console.error('Error al registrar la donación:', error);
@@ -291,17 +307,19 @@ submitMoneyDonation(): void {
     next: () => {
       this.successMessage = 'Donación registrada con éxito.';
       console.log('Donación registrada correctamente.');
-
-      // Limpiar los campos de la donación después de la donación exitosa
-      this.moneyData = {
-        amount: 0,
-        commentary: '',
-        image: null,
-      };
-      this.needIds = []; // Limpiar las necesidades
-
-      // Redirigir a la ruta Donate
-      this.router.navigate(['/Donate']);
+      const dialogRef = this.openDialogMoney(); // Suponiendo que openDialog() retorna el diálogo creado
+      dialogRef.afterClosed().subscribe(() => {
+        // Limpiar los campos de la donación después de la donación exitosa
+        this.moneyData = {
+          amount: 0,
+          commentary: '',
+          image: null,
+        };
+        this.needIds = []; // Limpiar las necesidades
+  
+        // Redirigir a la ruta Donate
+        this.router.navigate(['/Donate']);
+      });
     },
     error: (error) => {
       console.error('Error al registrar la donación:', error);
@@ -318,23 +336,56 @@ submitMoneyDonation(): void {
     const input = event.target as HTMLInputElement;
     if (input?.files && input.files.length > 0) {
       this.moneyData.image = input.files[0];
+      this.selectedFileName = input.files[0].name;
+    } else{
+      this.moneyData.image = null; // Opcional: Limpia el archivo si no hay selección
+      this.selectedFileName = null;
     }
   }
 
   onPaymentCompleted(): void {
-    console.log('Pago completado con PayPal.');
     this.submitMoneyDonation(); // Registrar la donación en tu API
   }
   
   onAmountEntered(): void {
-    if (this.moneyData.amount > 0) {
-      this.showPaypalButton = false; // Oculta el botón mientras espera el delay
-      setTimeout(() => {
-        this.showPaypalButton = true; // Muestra el botón después de 2 segundos
-      }, 2000);
+    const enteredAmount = Number(this.moneyData.amount);
+  
+    // Verifica si `amountRequered` es válido
+    if (this.amountRequered === null || this.amountRequered <= 0) {
+      console.error("La cantidad requerida es nula o inválida");
+      this.showPaypalButton = false;
+      return;
+    }
+  
+    // Validaciones sobre el monto ingresado
+    if (enteredAmount > 0) {
+      if (enteredAmount < this.amountRequered) {
+        // Monto válido: menor al requerido
+        console.log(`Monto válido: ${enteredAmount}. Mostrando botón después del delay.`);
+        this.showPaypalButton = false; // Oculta temporalmente
+        setTimeout(() => {
+          this.showPaypalButton = true; // Muestra después de 2 segundos
+        }, 2000);
+      } else {
+        this.errorMessage = `Monto ingresado (${enteredAmount}) excede la cantidad requerida (${this.amountRequered}).`;
+        this.showPaypalButton = false;
+      }
     } else {
-      this.showPaypalButton = false; // Oculta el botón si no hay monto válido
+      // Monto inválido: cero o negativo
+      console.error("El monto ingresado es inválido");
+      this.showPaypalButton = false;
     }
   }
-    
+  openDialogMoney(): MatDialogRef<ThanksyoumodalComponent> {
+    return this.dialog.open(ThanksyoumodalComponent, {
+      width: '400px',
+      data: { message: this.successMessage, message2: this.centerData.contact.phone_number },
+    });
+  }
+  openDialogOther(): MatDialogRef<ModalOthersComponent> {
+    return this.dialog.open(ModalOthersComponent, {
+      width: '400px',
+      data: { message: this.centerData.address, message2 : this.centerData.contact.phone_number },
+    });
+  }  
 }

@@ -188,5 +188,8 @@ export class ApiService {
   registerDonation(donorId: number, needId: number, formData: FormData): Observable<any> {
     const apiUrl = `http://127.0.0.1:8000/registerDonation/${donorId}/${needId}`;
     return this.http.post<any>(apiUrl, formData);
-  }  
+  } 
+  getRanking(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/donations/ranking`);
+  } 
 }

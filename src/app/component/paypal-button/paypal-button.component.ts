@@ -38,7 +38,6 @@ export class PaypalButtonComponent implements AfterViewInit {
         },
         onApprove: (data: any, actions: any) => {
           return actions.order.capture().then((details: any) => {
-            alert(`¡Pago completado por ${details.payer.name.given_name}!`);
             console.log('Detalles del pago:', details);
 
             // Emitir evento al completar el pago
@@ -63,9 +62,9 @@ export class PaypalButtonComponent implements AfterViewInit {
       }
 
       // Crear el script y agregarlo al DOM
-      const script = document.createElement('script');
+      const script = document.createElement('script');//el cliente es el de cato (ya no lo tiene luis)
       script.id = 'paypal-script';
-      script.src = 'https://www.paypal.com/sdk/js?client-id=AZSKswZtzXSztd39odeuJd6gEIkPL7DJBcOe0085e9B_3GKDu75pnwn9agUAThV3ee9LsltcFyctBpIV&currency=USD';
+      script.src = 'https://www.paypal.com/sdk/js?client-id=AS6kKT1SiCgPpIQKhLBKKtT0Izq7qAzeWQFLj5wAitaihFwye9MHryNc8O2qHilAxV6jjHOIlsXUeom6&currency=MXN&locale=es_MX';
       script.onload = () => resolve();
       script.onerror = (error) => reject('Error al cargar el script de PayPal: ' + error);
       document.body.appendChild(script);
