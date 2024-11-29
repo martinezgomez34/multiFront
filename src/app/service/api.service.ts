@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { donor, User } from '../models/user/user';
-import { catchError } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { donor, User, NewsItem } from '../models/user/user';
+import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { Resource } from '../models/resource';
 import { News } from '../models/news';
@@ -162,7 +162,88 @@ updateDonor(email: string, updatedDonor: any): Observable<any> {
   getCentersChildren(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/centers/shelters`);
   }
+
+  getNewsS(): Observable<any[]> {
+    return this.http.get<any>('http://127.0.0.1:8000/news/secret').pipe(
+      map((response) => {
+        if (response && Array.isArray(response.data)) {
+          return response.data.map((item: any) => item.image);
+        } else if (Array.isArray(response)) {
+          return response.map((item: any) => item.imageUrl || item.image);
+        } else {
+          return [];
+        }
+      }),
+      catchError((error) => {
+        console.error('Error fetching images:', error);
+        return of([]); 
+      })
+    );
+  }
+  getComunityNeeds(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/comunityNeeds`);
+  }
+
+  getFoodBankNeeds(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/bankNeeds`);
+  }
+
+  getSheltersNeeds(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/sheltersNeeds`);
+  }
+
+  // Métodos con filtros explícitos
+  getComunityNeedsWithFilters(needType: string, urgent: boolean): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/comunityNeeds/${needType}/${urgent}`);
+  }
+
+  getFoodBankNeedsWithFilters(needType: string, urgent: boolean): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/bankNeeds/${needType}/${urgent}`);
+  }
+
+  getSheltersNeedsWithFilters(needType: string, urgent: boolean): Observable<any> {
+    return this.http.get(`${this.apiUrl}/centers/sheltersNeeds/${needType}/${urgent}`);
+  }
+  getCenterByName(centerName: string): Observable<any> {
+    const url = `${this.apiUrl}/centerName/${centerName}`;
+    return this.http.get<any>(url);
+  }
+  getNeedsByUserNameAndType(userName: string, typeNeed: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/getNeedsbyNT/${userName}/${typeNeed}`);
+  }
+  registerDonation(donorId: number, needId: number, formData: FormData): Observable<any> {
+    const apiUrl = `http://127.0.0.1:8000/registerDonation/${donorId}/${needId}`;
+    return this.http.post<any>(apiUrl, formData);
+  } 
+  getRanking(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/donations/ranking`);
+  } 
+
+  // Editar Perfil del centro
+  updateCenter(email: string, updatedCenter: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('user_name', updatedCenter.user_name || '');
+    formData.append('new_email', updatedCenter.new_email || '');
+    formData.append('password', updatedCenter.password || '');
+    formData.append('type_center', updatedCenter.type_center || '');
+    formData.append('needs', updatedCenter.needs || '');
+    formData.append('contact_phone_number', updatedCenter.contact_phone_number || '');
+    formData.append('contact_social_media', updatedCenter.contact_social_media || '');
+    formData.append('contact_others', updatedCenter.contact_others || '');
+    formData.append('address', updatedCenter.address || '');
+    formData.append('is_active', updatedCenter.is_active?.toString() || '');
+    formData.append('is_verified', updatedCenter.is_verified?.toString() || '');
+    formData.append('is_sponsor', updatedCenter.is_sponsor?.toString() || '');
+    if (updatedCenter.image) {
+      formData.append('image', updatedCenter.image, updatedCenter.image.name);
+    }
+  
+    return this.http.put(`${this.apiUrl}/updateCenter/${email}`, formData).pipe(
+      catchError((error) => {
+        console.error('Error al actualizar centro', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
 }
-
-
-

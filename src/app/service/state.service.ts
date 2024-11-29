@@ -104,6 +104,21 @@ export class StateService {
     const user = this.User();
     return user && 'is_verified' in user ? user.is_verified !== undefined : false;
   }
-  
+
+  getUserId(): number | null {
+    const user = this.User();
+
+    if (!user) {
+      return null; // Si no hay un usuario logeado
+    }
+
+    // Verificar si el objeto de usuario tiene 'user_id'
+    if ('user_id' in user) {
+      return user.user_id as number;  // Retornar el valor de user_id
+    }
+
+    console.error('El usuario no tiene un ID válido.');
+    return null; // Si no se encuentra un ID válido
+  }
   
 }

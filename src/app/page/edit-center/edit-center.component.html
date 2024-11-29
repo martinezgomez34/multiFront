@@ -1,1 +1,69 @@
-<p>edit-center works!</p>
+<div class="update-center">
+    <h2>Actualizar Centro</h2>
+    <form [formGroup]="updateCenterForm" (ngSubmit)="updateCenter()">
+      <div>
+        <label>Email actual:</label>
+        <input type="email" formControlName="email" placeholder="Email actual" />
+      </div>
+  
+      <div>
+        <label>Nuevo nombre:</label>
+        <input type="text" formControlName="user_name" placeholder="Nombre del centro" />
+      </div>
+  
+      <div>
+        <label>Nuevo email:</label>
+        <input type="email" formControlName="new_email" placeholder="Nuevo email" />
+      </div>
+  
+      <div>
+        <label>Contraseña:</label>
+        <input type="password" formControlName="password" placeholder="Contraseña" />
+      </div>
+  
+      <div>
+        <label>Tipo de centro:</label>
+        <input type="text" formControlName="type_center" placeholder="Tipo de centro" />
+      </div>
+  
+      <div>
+        <label>Necesidades:</label>
+        <input type="text" formControlName="needs" placeholder="Necesidades" />
+      </div>
+  
+      <div>
+        <label>Teléfono de contacto:</label>
+        <input type="text" formControlName="contact_phone_number" placeholder="Teléfono de contacto" />
+      </div>
+  
+      <div>
+        <label>Redes sociales:</label>
+        <input type="text" formControlName="contact_social_media" placeholder="Redes sociales" />
+      </div>
+  
+      <div>
+        <label>Otros contactos:</label>
+        <input type="text" formControlName="contact_others" placeholder="Otros contactos" />
+      </div>
+  
+      <div>
+        <label>Dirección:</label>
+        <input type="text" formControlName="address" placeholder="Dirección" />
+      </div>
+  
+      <div>
+        <label>Imagen:</label>
+        <input type="file" (change)="onFileSelected($event)" />
+      </div>
+  
+      <button type="submit" [disabled]="isLoading">Actualizar Centro</button>
+    </form>
+  
+    <div *ngIf="successMessage" class="success-message">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
+  

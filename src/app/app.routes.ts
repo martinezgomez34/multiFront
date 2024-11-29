@@ -11,6 +11,7 @@ import { RouterModule} from '@angular/router';
 import { RegisterCenComponent } from './page/register-cen/register-cen.component';
 import { VerifyemailComponent } from './page/verifyemail/verifyemail.component';
 import { EditDonorComponent } from './page/edit-donor/edit-donor.component';
+import { EditCenterComponent } from './page/edit-center/edit-center.component';
 
 
 export const routes: Routes = [
@@ -53,5 +54,9 @@ export const routes: Routes = [
     {
         path: 'edit-donor',
         component:EditDonorComponent
+    },
+    {
+        path: 'edit-center',
+        component:EditCenterComponent
     }
 ];

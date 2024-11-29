@@ -1,79 +1,309 @@
-<div class="flex flex-col items-center py-8 min-h-screen bg-gradient-to-b from-white to-cyan-700/50">
-    <div class="flex items-center w-full max-w-4xl border-b border-gray-300 py-6 px-4">
-      <img src="logoE.png" alt="Logo de Centro San Pedro" class="h-60 w-60 rounded-full mx-4" />
+<div 
+  *ngIf="centerData; else loading" 
+  class="flex flex-col items-center py-8 min-h-screen bg-gradient-to-b from-white to-cyan-700/50 dark:from-black dark:to-cyan-800 dark:text-white"
+>
+  <!-- Información del centro -->
+  <div 
+    class="flex flex-col items-center w-full max-w-4xl border-b py-6 px-4 text-center border-gray-300 dark:border-gray-700"
+  >
+    <!-- Imagen del centro -->
+    <img
+      [src]="centerData.images"
+      (error)="onImageError($event)"
+      alt="Logo de {{ centerData.user_name | titlecase }}"
+      class="h-40 w-40 object-cover rounded-full mb-4"
+    />
   
-      <div class="flex flex-col items-start text-left">
-        <h1 class="text-3xl font-bold">Centro San Pedro</h1>
-        <p class="text-gray-700">
-          San Pedro, una pequeña comunidad situada en las montañas, enfrenta actualmente una crisis sin precedentes. Debido a las fuertes lluvias y deslizamientos de tierra, muchas familias han perdido sus hogares y se han quedado sin acceso a recursos básicos como agua potable y alimentos...
-        </p>
-      </div>
+    <!-- Texto dinámico -->
+    <div class="flex flex-col items-center">
+      <h1 class="text-3xl font-bold mb-2">Centro {{ centerData.user_name | titlecase }}</h1>
+
+      <p class="text-gray-700 dark:text-gray-400 mb-1">
+        Tipo de centro: {{ centerData.type_center | translate2 }}
+      </p>
+      <p class="text-gray-500 dark:text-gray-300 mt-2">
+        <a 
+          *ngIf="centerData.contact.social_media" 
+          [href]="centerData.contact.social_media" 
+          target="_blank" 
+          class="text-blue-500 dark:text-blue-400 underline"
+        >
+          Red social
+        </a>
+      </p>
     </div>
-  
-    <div class="bg-gradient-to-b from-white to-sky-100 rounded-lg shadow-md p-8 max-w-lg w-full mt-8"> <!-- Cambié max-w-md a max-w-lg y aumenté el padding -->
-      <form class="space-y-6"> <!-- Espaciado mayor entre los campos -->
-        <div class="relative">
-          <select class="block w-full px-4 py-2 pr-8 border border-gray-300 rounded-md bg-gray-100 text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>Formato de la donación</option>
-            <option>Ropa</option>
-            <option>Alimentos</option>
-            <option>Otros</option>
-          </select>
-        </div>
-    
-        <div>
-          <label class="block text-gray-700">¿La prenda está en buen estado?</label>
-          <div class="flex items-center space-x-4">
-            <label class="flex items-center">
-              <span class="ml-2 text-gray-700">Si</span>
-              <input type="radio" name="estado" class="text-blue-500 focus:ring-blue-500" />
-            </label>
-            
-          </div>
-          <label class="flex items-center">
-            <span class="ml-2 text-gray-700">No</span>
-            <input type="radio" name="estado" class="text-blue-500 focus:ring-blue-500" />
+    <p class="text-gray-500 dark:text-gray-300 mt-2">cantidad requerida: {{amountRequered}}</p>
+  </div>  
+
+  <div 
+    class="bg-gradient-to-b from-white to-sky-100 dark:from-gray-800 dark:to-gray-700 rounded-lg shadow-md p-8 max-w-lg w-full mt-8"
+  >
+    <form *ngIf="needType" class="space-y-6">
+      <!-- Formulario para "money" -->
+      <ng-container *ngIf="needType === 'money'">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Donación Monetaria</h2>
+          <p class="text-gray-700 dark:text-gray-400 mb-1">No tiene que ser mucho, ¡cualquier apoyo cuenta!</p>
+          <button (click)="openDialogMoney()">dasds</button><!-- Boton de prueba Recuerda eliminar -->
+          <!-- Campo de cantidad a donar -->
+          <label class="block mb-4">
+            <span class="text-gray-700 dark:text-gray-400">Cantidad a donar:</span>
+            <input 
+              type="number" 
+              name="amount"
+              [(ngModel)]="moneyData.amount"
+              (input)="onAmountEntered()"
+              class="block w-full mt-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition duration-300"
+              placeholder="Ejemplo: 100"
+            />
           </label>
-        </div>
-    
-        <div>
-          <label class="block text-gray-700">¿Cuántas prendas serán?</label>
-          <input type="number" placeholder="Cantidad" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        </div>
-    
-        <div class="flex space-x-4"> <!-- Coloca el selector de tallas más pequeño a la izquierda -->
-          <div class="w-1/3">
-            <label class="block text-gray-700">¿Qué tallas aproximadamente?</label>
-            <div class="border border-gray-300 rounded-md">
-              <ul class="flex flex-col text-center divide-y divide-gray-300">
-                <li class="py-1 text-gray-500">Ch</li>
-                <li class="py-1 text-gray-500">M</li>
-                <li class="py-1 text-gray-500">G</li>
-                <li class="py-1 text-gray-500">XG</li>
-              </ul>
-            </div>
+      
+          <!-- Campo de comentario -->
+          <label class="block mb-4">
+            <span class="text-gray-700 dark:text-gray-400">Comentario:</span>
+            <textarea 
+              name="commentary"
+              [(ngModel)]="moneyData.commentary"
+              class="block w-full mt-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition duration-300"
+              placeholder="Agrega un comentario"
+            ></textarea>
+          </label>
+      
+          <!-- Botón PayPal -->
+          <div *ngIf="showPaypalButton" class="mt-6 opacity-0 animate-fadeIn">
+            <app-paypal-button 
+              [amount]="moneyData.amount || 0" 
+              (paymentCompleted)="onPaymentCompleted()">
+            </app-paypal-button>
           </div>
-        </div>
-    
-        <div class="flex-1">
-          <label class="block text-gray-700">Fotografía:</label>
-          <textarea placeholder="Subir" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-        </div>
-    
-        <div class="flex justify-end">
-          <button type="button" class="px-6 py-2 text-gray-700 bg-gray-300 border border-gray-300 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            Subir
-          </button>
-        </div>
-      </form>
-    </div>
-          
-      
-      
-  
-    <div class="mt-4">
-      <button type="submit" class="px-8 py-2 text-white bg-cyan-600 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        Doname!
+      </ng-container>
+                            
+      <!-- Formulario para "food" -->
+      <ng-container *ngIf="needType === 'food'">
+      <h2 class="text-lg font-bold">Donación de Alimentos</h2>
+      <p class="text-gray-700 dark:text-gray-400 mb-1">Puede ser procesado o crudo, el centro verificara si tiene buena pinta o no.</p>
+      <label class="block">
+      <span class="text-gray-700 dark:text-gray-400">Tipo de alimento:</span>
+    <input 
+      type="text" 
+      class="block w-full mt-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition duration-300"
+      [(ngModel)]="foodData.type" 
+      name="type"
+      placeholder="Ejemplo: Arroz, Frijoles, Latas de atún" 
+    />
+  </label>
+
+  <!-- Cantidad en kilogramos -->
+  <label class="block">
+    <span class="text-gray-700 dark:text-gray-400">Cantidad en kilogramos:</span>
+    <input 
+      type="number" 
+      class="block w-full mt-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition duration-300"
+      [(ngModel)]="foodData.amount" 
+      name="amount"
+      placeholder="Ejemplo: 5"
+      required
+    />
+  </label>
+
+  <!-- Fecha de caducidad -->
+  <label class="block">
+    <span class="text-gray-700 dark:text-gray-400">Fecha de caducidad:</span>
+    <input 
+      type="date" 
+      class="block w-full mt-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition duration-300"
+      [(ngModel)]="foodData.expiryDate" 
+      name="expiryDate"
+      required
+    />
+  </label>
+
+  <!-- Comentarios -->
+  <label class="block">
+    <span class="text-gray-700 dark:text-gray-400">Comentarios:</span>
+    <textarea 
+      class="block w-full mt-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition duration-300"
+      [(ngModel)]="foodData.commentary" 
+      name="commentary"
+      placeholder="Escribe algún comentario opcional"
+    ></textarea>
+  </label>
+
+  <!-- Imagen -->
+  <div class="mb-4">
+    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+      Subir imagen de comida:
+    </label>
+    <div class="flex items-center space-x-4">
+      <!-- Botón para subir imagen -->
+      <button
+        type="button"
+        class="bg-cyan-700 text-white py-2 px-4 rounded-md hover:bg-cyan-600 transition focus:ring focus:ring-blue-400 focus:outline-none flex-shrink-0"
+        style="min-width: 150px;"
+        (click)="fileInput.click()"
+      >
+        Seleccionar Imagen
       </button>
+  
+      <!-- Input para seleccionar archivos (oculto) -->
+      <input
+        #fileInput
+        type="file"
+        name="image"
+        accept="image/*"
+        class="hidden"
+        (change)="onFileSelectedFood($event)"
+      />
+  
+      <!-- Nombre del archivo seleccionado (animado y con truncamiento) -->
+      <span
+        *ngIf="selectedFileName"
+        class="text-gray-700 dark:text-gray-400 animate-fadeIn truncate"
+        style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+      >
+        {{ selectedFileName }}
+      </span>
     </div>
+  
+    <!-- Texto adicional -->
+    <small class="block mt-2 text-gray-500 dark:text-gray-400">
+      Sube una imagen donde se vea explicitamente lo que quiera donar.
+    </small>
   </div>
+  
+
+
+  <!-- Botón de envío -->
+  <button 
+    type="submit" 
+    class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+    (click)="submitFoodDonation()"
+  >
+    Enviar Donación
+  </button>
+      </ng-container>
+
+      <!-- Formulario para "clothes" -->
+      <ng-container *ngIf="needType === 'clothes'">
+      <h2 class="text-lg font-bold">Donación de Ropa</h2>
+      <p class="text-gray-700 dark:text-gray-400 mb-1">La tallas pueden ser un aproximado y las prendas pueden ser cualquiera, al final el centro tomara la desicion si aceptar o no.</p>
+      <button (click)="openDialogOther()">dasdsads</button><!-- Boton de prueba Recuerda eliminar -->
+      <form (ngSubmit)="submitClothesDonation()" enctype="multipart/form-data">
+      <!-- Tipo de prenda -->
+      <label class="block">
+      <span class="text-gray-700 dark:text-gray-400">Tipo de prenda:</span>
+      <input 
+        type="text" 
+        class="block w-full mt-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition duration-300"
+        [(ngModel)]="donationData.type" 
+        name="type"
+        placeholder="Ejemplo: Camisas, Pantalones, Abrigos" 
+      />
+    </label>
+
+    <!-- Talla -->
+    <label class="block">
+      <span class="text-gray-700 dark:text-gray-400">Talla:</span>
+      <input 
+        type="text" 
+        class="block w-full mt-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition duration-300"
+        [(ngModel)]="donationData.size" 
+        name="size"
+        placeholder="Ejemplo: M, L, XL" 
+      />
+    </label>
+
+    <!-- Cantidad -->
+    <label class="block">
+      <span class="text-gray-700 dark:text-gray-400">Cantidad:</span>
+      <input 
+        type="number" 
+        class="block w-full mt-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition duration-300"
+        [(ngModel)]="donationData.amount" 
+        name="amount"
+        placeholder="Cantidad de prendas" 
+        required
+      />
+    </label>
+
+    <!-- Comentarios -->
+    <label class="block">
+      <span class="text-gray-700 dark:text-gray-400">Comentarios:</span>
+      <textarea 
+        class="block w-full mt-2 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition duration-300"
+        [(ngModel)]="donationData.commentary" 
+        name="commentary"
+        placeholder="Escribe algún comentario o condicion de la o las prendas" 
+      ></textarea>
+    </label>
+
+    <!-- Imagen -->
+    <div class="mb-4">
+      <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+        Subir imagen de la o las prendas:
+      </label>
+      <div class="flex items-center space-x-4">
+        <!-- Botón para subir imagen -->
+        <button
+          type="button"
+          class="bg-cyan-700 text-white py-2 px-4 rounded-md hover:bg-cyan-600 transition focus:ring focus:ring-blue-400 focus:outline-none flex-shrink-0"
+          style="min-width: 150px;"
+          (click)="fileInput.click()"
+        >
+          Seleccionar Imagen
+        </button>
+    
+        <!-- Input para seleccionar archivos (oculto) -->
+        <input
+          #fileInput
+          type="file"
+          name="image"
+          accept="image/*"
+          class="hidden"
+          (change)="onFileSelected($event)"
+        />
+    
+        <!-- Nombre del archivo seleccionado (animado y con truncamiento) -->
+        <span
+          *ngIf="selectedFileName"
+          class="text-gray-700 dark:text-gray-400 animate-fadeIn truncate"
+          style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+        >
+          {{ selectedFileName }}
+        </span>
+      </div>
+    
+      <!-- Texto adicional -->
+      <small class="block mt-2 text-gray-500 dark:text-gray-400">
+        Sube una imagen donde se vea explicitamente lo que quiera donar.
+      </small>
+    </div>
+
+    <!-- Botón de envío -->
+    <button 
+      type="submit" 
+      class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+    >
+      Enviar Donación
+    </button>
+  </form>
+      </ng-container>
+    </form>
+  </div>
+</div>
+
+<!-- Mensaje de carga -->
+<ng-template #loading>
+  <div class="text-center py-8">
+    <p class="text-gray-500 dark:text-gray-400">
+      Cargando datos del centro...
+    </p>
+  </div>
+</ng-template>
+
+<!-- Mensaje de error -->
+<div 
+  *ngIf="errorMessage" 
+  class="text-center py-8 text-red-500 dark:text-red-400 bg-white dark:bg-black/90"
+>
+  {{ errorMessage }}
+</div>
