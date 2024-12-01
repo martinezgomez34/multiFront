@@ -5,3 +5,32 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+/* Transiciones ultra sutiles de opacidad */
+::view-transition-old(root) {
+    animation: exit-fade 0.3s ease-in-out 0s 1 normal forwards;
+}
+
+::view-transition-new(root) {
+    animation: enter-fade 0.3s ease-in-out 0s 1 normal forwards;
+}
+
+/* Animación para entrada (solo opacidad) */
+@keyframes enter-fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animación para salida (solo opacidad) */
+@keyframes exit-fade {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+

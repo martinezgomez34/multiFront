@@ -1,0 +1,46 @@
+<div [ngClass]="{ 'dark': isDarkMode }" class="fixed inset-0 flex items-center justify-center z-50">
+    <!-- Fondo transparente con oscurecimiento -->
+    <div
+      class="absolute inset-0 bg-black/40 !dark:bg-black/60 backdrop-blur-sm"
+      (click)="closeDialog()"
+    ></div>
+  
+    <!-- Contenido del modal -->
+    <div
+      class="relative w-96 p-6 bg-gradient-to-b from-white to-cyan-700/50 dark:from-black dark:to-cyan-800 rounded-lg shadow-lg z-10"
+    >
+      <!-- Header con logo y botón de cerrar -->
+      <div class="flex justify-center items-center relative mb-4">
+        <img
+          [src]="isDarkMode ? 'Logo02.png' : 'Logo01.png'"
+          alt="Logo"
+          class="h-10 mx-auto"
+        />
+      </div>
+  
+      <!-- Contenido dinámico del modal -->
+      <div class="mt-4 text-center">
+        <h2 class="text-base font-bold text-gray-800 dark:text-white">
+          ¡Gracias por querer donar!
+        </h2>
+        <p class="mt-2 text-gray-900 dark:text-gray-300">
+          Aquí te proporcionamos los datos correspondientes para proseguir con su buen acto:
+        </p>
+        <p
+          class="mt-2 text-lg font-semibold text-cyan-700 dark:text-cyan-400"
+        >
+          {{ data.message }}
+        </p>
+        <p
+          class="mt-2 text-lg font-semibold text-cyan-700 dark:text-cyan-400"
+        >
+          {{ data.message2 }}
+        </p>
+        <p class="mt-2 text-sm text-gray-900 dark:text-gray-300">
+          Nos da gusto que quieras apoyar. Cuando el centro reciba tu donación,
+          este te dará de alta y obtendrás un punto para mejorar tu ranking.
+        </p>
+      </div>
+    </div>
+  </div>
+  

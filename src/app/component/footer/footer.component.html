@@ -1,23 +1,18 @@
 <footer [ngClass]="{'dark': isDarkMode}" class="bg-white p-10 border-y-2 border-gray-300 dark:bg-black/90 dark:border-gray-900 py-">
-    <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl ">
-      <!-- Sección informativa a la izquierda -->
-      <div class="flex flex-col max-w-lg text-left text-gray-700">
-        <!-- Enlaces de navegación y contacto -->
-        <div class="flex flex-col space-y-2 text-sm">
-          <a href="#" class="hover:text-blue-500 text-gray-800 dark:text-gray-200">Sobre Nosotros</a>
-          <a href="#" class="hover:text-blue-500 text-gray-800 dark:text-gray-200">Contacto</a>
-        </div>
+  <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl ">
+    <!-- Sección informativa a la izquierda -->
+    <div class="flex flex-col max-w-lg text-left text-gray-700">
+      <!-- Enlaces de navegación y contacto -->
+      <div class="flex flex-col space-y-2 text-sm">
+        <a href="#" class="hover:text-blue-500 text-gray-800 dark:text-gray-200">Sobre Nosotros</a>
+        <a href="#" class="hover:text-blue-500 text-gray-800 dark:text-gray-200">Contacto</a>
       </div>
-  
-      <!-- Imagen de logo a la derecha -->
-      <div class="flex-shrink-0 sm:mt-0 ">
-        @if (isDarkMode) {
-          <img src="Logo02.png" class="h-8 sm:h-14 w-auto" alt="Logo de Donaciones" />
-        }@else {
-          <img src="Logo01.png" class="h-8 sm:h-14 w-auto" alt="Logo de Donaciones" />
-        }
-      </div>
-      
     </div>
+
+    <!-- Imagen de logo a la derecha -->
+    <div class="flex-shrink-0 sm:mt-0">
+      <img [src]="isDarkMode ? 'Logo02.png' : 'Logo01.png'" class="h-8 sm:h-14 w-auto" alt="Logo de Donaciones" />
+    </div>
+    
+  </div>
 </footer>
-  

@@ -1,0 +1,58 @@
+<div [ngClass]="{ dark: isDarkMode }">
+  <div class="relative inline-block text-left">
+    <button
+      (click)="toggleMenu()"
+      class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2"
+      [attr.aria-expanded]="menuOpen ? 'true' : 'false'"
+    >
+      <span class="flex items-center space-x-2 text-sm font-medium text-gray-800 dark:text-gray-200">
+        <img [src]="getImage()" class="h-8 w-8 object-cover rounded-full" />
+        <span>{{ stateService.User().user_name || 'Usuario' }}</span>
+      </span>    
+      <svg
+        class="h-5 w-5 ml-2"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 9l-7 7-7-7"
+        ></path>
+      </svg>
+    </button>
+
+    <!-- Menú desplegable -->
+    <div
+      *ngIf="menuOpen"
+      (click)="closeMenu()"
+      class="text-gray-700 text-center bg-white dark:bg-slate-800 dark:text-gray-200 origin-top-left absolute right-1 mt-2 w-34 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 px-0 py-2"
+    >
+      <!-- Opciones Condicionales -->
+      <ng-container *ngIf="isDonor()">
+        <a *ngIf="getSponsor() == false" routerLink="suscribtion" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+          suscripción
+        </a>
+        <a routerLink="mydonations" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">Mis Donaciones</a>
+        <a routerLink="DonorEdit" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">perfil</a>
+      </ng-container>
+
+      <ng-container *ngIf="isCenter()">
+        <a routerLink="NewsCenter" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">Mis Noticias</a>
+        <a routerLink="Needs" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">Necesidades</a>
+        <a routerLink="CenterInformation" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">Informacion</a>
+        <a routerLink="CenterInformation" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">Inventario</a>
+      </ng-container>
+
+      <ng-container *ngIf="isRegularUser()">
+        <a routerLink="Profile" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">Mi Perfil</a>
+        <a *ngIf="isAdminUser()" routerLink="AdminPanel" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">Panel de Administración</a>
+      </ng-container>
+
+      <!-- Cerrar sesión -->
+      <button (click)="logout()" class=" px-10 py-2 text-sm dark:text-gray-700 hover:bg-cyan-500 rounded-md">Salir</button>
+    </div>
+  </div>
+</div>

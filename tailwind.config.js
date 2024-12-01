@@ -5,7 +5,14 @@ module.exports = {
     "./src/**/*.{html,ts}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      rotate: {
+        '30': '30deg',
+        '-30': '-30deg',
+        '28': '28deg',
+        '-28': '-28deg',
+      },
+    },
   },
   plugins: [],
 }
