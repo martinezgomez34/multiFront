@@ -15,6 +15,20 @@ export class LocalStorageService {
     }
   }
 
+  setUserAdmin(is_admin: boolean): void {
+    if (this.isLocalStorageAvailable()) {
+      localStorage.setItem('is_admin', is_admin.toString());  // Almacena el valor como string
+    }
+  }
+  
+  getUserAdmin(): boolean {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const isAdmin = localStorage.getItem('is_admin');
+      return isAdmin === 'true';  // Devuelve true si el valor es 'true' como cadena
+    }
+    return false;  // Valor predeterminado si no se encuentra en localStorage
+  }  
+
   getDarkMode(): boolean {
     // Verifica si estamos en el navegador
     if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {

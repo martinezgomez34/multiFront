@@ -58,6 +58,7 @@ export class StateService {
     const savedUserType = this.localStorageService.getUserType();
     const savedUserImage = this.localStorageService.getUserImage();
     const savedUserSponsor = this.localStorageService.getUserSponsor();
+    const savedIsAdmin = this.localStorageService.getUserAdmin(); 
     if (savedUser && savedUserType) {
       this._state.update((state) => ({
         ...state,
@@ -125,6 +126,11 @@ export class StateService {
         images: '', // Limpiar tipo de usuario
       };
     });
+  }
+  
+  isAdmin(): boolean {
+    const user = this.User();
+    return user && 'is_admin' in user ? user.is_admin : false;
   }
 
   // Método para verificar si el usuario es un donante

@@ -21,6 +21,7 @@ export class MenuComponent implements OnInit {
 
   showMenu = false;
   menuOpen = false;
+  isAdmin: boolean = false;
   
   // Variable para almacenar el tipo de usuario
   userType: string = '';
@@ -32,6 +33,7 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     // Suscribirse a cambios en el tipo de usuario
     this.userType = this.stateService.userType();
+    this.isAdmin = this.stateService.isAdmin();
     console.log('Imagen en stateService:', this.stateService.userImage);
   }
 
@@ -69,5 +71,8 @@ export class MenuComponent implements OnInit {
   }
   getSponsor(): boolean{
     return this.local.getUserSponsor()
+  }
+  isAdminUser(): boolean {
+    return this.isAdmin;  // Retorna si el usuario es admin
   }
 }
