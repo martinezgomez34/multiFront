@@ -195,7 +195,7 @@ export class StateService {
       console.log('User ID:', user.user_id);
       return user.user_id as number;  // Retornar el valor de user_id
     }
-  
+
     console.error('El usuario no tiene un ID válido.');
     return null;
   }

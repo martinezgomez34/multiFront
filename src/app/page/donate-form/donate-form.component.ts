@@ -388,4 +388,66 @@ submitMoneyDonation(): void {
       data: { message: this.centerData.address, message2 : this.centerData.contact.phone_number },
     });
   }  
+
+
+  onImageError(event: Event): void {
+    const element = event.target as HTMLImageElement;
+    element.src = 'assets/default-logo.png'; // Ruta de la imagen por defecto
+  }
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input?.files && input.files.length > 0) {
+      this.moneyData.image = input.files[0];
+      this.selectedFileName = input.files[0].name;
+    } else{
+      this.moneyData.image = null; // Opcional: Limpia el archivo si no hay selección
+      this.selectedFileName = null;
+    }
+  }
+
+  onPaymentCompleted(): void {
+    this.submitMoneyDonation(); // Registrar la donación en tu API
+  }
+  
+  onAmountEntered(): void {
+    const enteredAmount = Number(this.moneyData.amount);
+  
+    // Verifica si `amountRequered` es válido
+    if (this.amountRequered === null || this.amountRequered <= 0) {
+      console.error("La cantidad requerida es nula o inválida");
+      this.showPaypalButton = false;
+      return;
+    }
+  
+    // Validaciones sobre el monto ingresado
+    if (enteredAmount > 0) {
+      if (enteredAmount < this.amountRequered) {
+        // Monto válido: menor al requerido
+        console.log(`Monto válido: ${enteredAmount}. Mostrando botón después del delay.`);
+        this.showPaypalButton = false; // Oculta temporalmente
+        setTimeout(() => {
+          this.showPaypalButton = true; // Muestra después de 2 segundos
+        }, 2000);
+      } else {
+        this.errorMessage = `Monto ingresado (${enteredAmount}) excede la cantidad requerida (${this.amountRequered}).`;
+        this.showPaypalButton = false;
+      }
+    } else {
+      // Monto inválido: cero o negativo
+      console.error("El monto ingresado es inválido");
+      this.showPaypalButton = false;
+    }
+  }
+  openDialogMoney(): MatDialogRef<ThanksyoumodalComponent> {
+    return this.dialog.open(ThanksyoumodalComponent, {
+      width: '400px',
+      data: { message: this.successMessage, message2: this.centerData.contact.phone_number },
+    });
+  }
+  openDialogOther(): MatDialogRef<ModalOthersComponent> {
+    return this.dialog.open(ModalOthersComponent, {
+      width: '400px',
+      data: { message: this.centerData.address, message2 : this.centerData.contact.phone_number },
+    });
+  }  
 }

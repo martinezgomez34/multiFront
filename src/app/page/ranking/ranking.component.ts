@@ -39,4 +39,6 @@ export class RankingComponent {
   private concatenateImageUrl(imagePath: string): string {
     return `${this.baseUrl}${imagePath}`;
   }
+
 }
+

@@ -1,0 +1,30 @@
+<div class="container mx-auto px-4 py-8 bg-gradient-to-t from-cyan-700/50 bg-white dark:bg-black/95">
+    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white text-center">Gestión de Centros</h2>
+  
+    <!-- Mensaje si no hay centros -->
+    <div *ngIf="centers.length === 0" class="text-center py-6 text-gray-600 dark:text-gray-400">
+      <p>No hay centros disponibles para mostrar.</p>
+    </div>
+  
+    <!-- Lista de centros -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"> <!-- Ajuste en gap -->
+      <div *ngFor="let center of centers" class="flex flex-col items-center bg-transparent p-2"> <!-- Ajuste en padding -->
+        <div class="w-32 h-32 mb-2"> <!-- Tamaño aumentado -->
+          <img
+            [src]="center.images"
+            alt="{{ center.name }}"
+            class="w-full h-full object-cover rounded-full shadow-md"
+            *ngIf="center.images"
+          />
+        </div>
+        <h3 class="text-md font-semibold text-gray-900 dark:text-white text-center mb-2">{{ center.name }}</h3>
+        <button
+          (click)="confirmDeleteCenter(center.email)"
+          class="px-3 py-1 text-white bg-cyan-500 rounded-full hover:bg-cyan-400 dark:bg-cyan-600 dark:hover:bg-cyan-500 text-sm"
+        >
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+  
