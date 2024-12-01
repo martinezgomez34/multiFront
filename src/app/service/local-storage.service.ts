@@ -15,6 +15,15 @@ export class LocalStorageService {
     }
   }
 
+  getDarkMode(): boolean {
+    const darkMode = this.getItem('darkMode');
+    return darkMode === 'true';  // Devuelve true si el valor en localStorage es 'true'
+  }
+
+  setDarkMode(isDark: boolean): void {
+    this.setItem('darkMode', isDark.toString());  // Almacena 'true' o 'false' como string
+  }
+
   getItem(key: string): string | null {
     if (this.isLocalStorageAvailable()) {
       return localStorage.getItem(key);
@@ -35,9 +44,13 @@ export class LocalStorageService {
   }
 
   getUser<T>(): T | null {
-    const user = this.getItem('user');
-    return user ? JSON.parse(user) as T : null;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const user = localStorage.getItem('user');
+      return user ? JSON.parse(user) as T : null;
+    }
+    return null;
   }
+  
 
   setUser<T>(user: T): void {
     this.setItem('user', JSON.stringify(user));
@@ -51,6 +64,10 @@ export class LocalStorageService {
     if (this.isLocalStorageAvailable()) {
       localStorage.setItem('user_type', userType);
     }
+  }
+
+  removeUserType(): void {
+    localStorage.removeItem('userType');
   }
 
   getUserType(): string | null {

@@ -42,15 +42,15 @@ export class LoginComponent {
       password: ['', Validators.required]
     });
   }
-
   onSubmit(): void {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
       this.apiService.loginUser(email, password).subscribe(
-        (response) => {
+        (response: any) => {
           if (response && response.access_token) {
+            localStorage.setItem('token', response.access_token);
             this.apiService.getUserByEmail(email).subscribe(
-              (user) => {
+              (user: any) => {
                 if (user) {
                   const userType = response.user_type || 'user';
                   const images = response.images || '';
@@ -63,18 +63,20 @@ export class LoginComponent {
                     this.stateService.setUser(user.user as Center, userType, images, is_sponsor);
                   } else {
                     this.stateService.setUser(user.user as User, userType, images, is_sponsor);
+
                   }
                   alert('¡Inicio de sesión exitoso!');
                   this.router.navigate(['']);
                 }
               },
-              (error) => {
+              error => {
                 console.error('Error fetching user:', error);
+                alert('No se pudo obtener los datos del usuario. Inténtalo de nuevo.');
               }
             );
           }
         },
-        (error) => {
+        error => {
           console.error('Login error:', error);
           if (error.status === 401 && error.error.detail === 'Contraseña incorrecta') {
             alert('La contraseña ingresada es incorrecta. Por favor, verifica e intenta nuevamente.');
@@ -86,5 +88,6 @@ export class LoginComponent {
         }
       );
     }
-  }  
+  }
+  
 }

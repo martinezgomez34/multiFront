@@ -1,5 +1,5 @@
 <div [ngClass]="{ dark: isDarkMode }">
-  <div class="relative inline-block text-left">
+  <div class="relative inline-block text-left ">
     <button
       (click)="toggleMenu()"
       class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2"
@@ -28,14 +28,17 @@
     <div
       *ngIf="menuOpen"
       (click)="closeMenu()"
-      class="text-gray-700 text-center dark:text-gray-200 origin-top-left absolute mt-2 w-34 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 px-2 py-2"
+      class="text-gray-700 text-center bg-white dark:bg-slate-800 dark:text-gray-200 origin-top-left absolute right-1 mt-2 w-34 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 px-0 py-2"
+
     >
       <!-- Opciones Condicionales -->
       <ng-container *ngIf="isDonor()">
+
         <a *ngIf="getSponsor() == !true" routerLink="suscribtion" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
           suscripción
         </a>        
         <a routerLink="mydonations" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+        <a routerLink="DonorEdit" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
           Mis Donaciones
         </a>
         <a routerLink="edit-donor" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
@@ -44,10 +47,10 @@
       </ng-container>
 
       <ng-container *ngIf="isCenter()">
-        <a routerLink="CenterMyNew" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+        <a routerLink="NewsCenter" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
           Mis Noticias
         </a>
-        <a routerLink="CenterNeeds" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+        <a routerLink="Needs" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
           Necesidades
         </a>
         <a routerLink="CenterInformation" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">

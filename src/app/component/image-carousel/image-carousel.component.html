@@ -1,0 +1,22 @@
+<div *ngIf="images.length > 0">
+  <div class="w-full flex flex-col justify-between overflow-hidden">
+    <!-- Contenedor de imagen -->
+    <div class="w-full h-[400px] md:h-[600px] lg:h-[700px]">
+      <img 
+        [src]="images[currentSlide].url" 
+        [alt]="images[currentSlide].title" 
+        class="w-full h-full object-cover"/>
+    </div>
+  </div>
+
+  <!-- Indicadores de slides -->
+  <div class="flex justify-center space-x-2 mt-4 p-4">
+    <button
+      *ngFor="let image of images; let i = index"
+      (click)="setCurrentSlide(i)"
+      [class.bg-white]="currentSlide === i"
+      [class.bg-opacity-60]="currentSlide !== i"
+      class="w-4 h-4 rounded-full opacity-60 hover:bg-opacity-100 transition"
+    ></button>
+  </div>
+</div>
