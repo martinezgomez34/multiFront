@@ -19,10 +19,10 @@ phone_number: string;
 image?: File
 }
 export interface NewsItem {
-_id: string;
-title: string;
-public_date: string;
-image: string; 
-status: string;
-author: string;
+  _id: string;
+  title: string;
+  public_date: string;
+  image: string; 
+  status: string;
+  author: string;
 }

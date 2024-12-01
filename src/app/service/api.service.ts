@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { donor, User, NewsItem } from '../models/user/user';
 import { catchError, map } from 'rxjs/operators';
@@ -15,7 +15,6 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  // Registrar usuario
   registerUser(user: any): Observable<any> {
     const formData = new FormData();
     formData.append('user_name', user.user_name);
@@ -245,5 +244,65 @@ updateDonor(email: string, updatedDonor: any): Observable<any> {
       })
     );
   }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<{ users: User[] }>(`${this.apiUrl}/users`).pipe(
+      map(response => response.users), // Asegúrate de que esto mapea correctamente la propiedad `users`
+      catchError((error) => {
+        console.error('Error al obtener usuarios', error);
+        return throwError(() => error);
+      })
+    );
+  }
+  
+  
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'Error desconocido';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error del cliente: ${error.error.message}`;
+    } else {
+      errorMessage = `Error del servidor: ${error.status} - ${error.message}`;
+    }
+    return throwError(errorMessage);
+  }
+
+
+  deleteCenter(email: string): Observable<any> {
+    return this.http.delete(`http://localhost:8000/deleteCenter/${email}`);
+  }
+
+
+
+
+
+
+  getAllDonors(): Observable<donor[]> {
+    return this.http.get<{ donors: donor[] }>(`${this.apiUrl}/donors`).pipe(
+      map(response => response.donors),
+      catchError((error) => {
+        console.error('Error al obtener los donantes', error);
+        return throwError(() => error);
+      })
+    );
+  }
+  
+
+  deleteDonor(email: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/donor/${email}`).pipe(
+      catchError((error) => {
+        console.error('Error al eliminar donante', error);
+        return throwError(() => error);
+      })
+    );
+  }
+  
+
+  searchDonors(searchTerm: string) {
+    return this.http.get<any[]>(`http://127.0.0.1:8000/donors/search?term=${searchTerm}`);
+  }
+  
+  
+
 
 }

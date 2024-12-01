@@ -12,6 +12,8 @@ import { RegisterCenComponent } from './page/register-cen/register-cen.component
 import { VerifyemailComponent } from './page/verifyemail/verifyemail.component';
 import { EditDonorComponent } from './page/edit-donor/edit-donor.component';
 import { EditCenterComponent } from './page/edit-center/edit-center.component';
+import { AdminUsersComponent } from './page/admin-users/admin-users.component';
+import { DeleteCentersComponent } from './page/delete-centers/delete-centers.component';
 
 
 export const routes: Routes = [
@@ -58,5 +60,13 @@ export const routes: Routes = [
     {
         path: 'edit-center',
         component:EditCenterComponent
+    },
+    {
+        path: 'admin-users',
+        component:AdminUsersComponent
+    },
+    {
+        path: 'delete-centers',
+        component:DeleteCentersComponent
     }
 ];

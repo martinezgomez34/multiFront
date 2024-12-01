@@ -73,3 +73,4 @@ export class MainComponent implements OnInit, OnChanges {
     this.currentSlide = index;
   }
 }
+

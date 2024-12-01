@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../service/api.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Input } from '@angular/core';
 
 @Component({
   selector: 'app-edit-donor',
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./edit-donor.component.scss'],
 })
 export class EditDonorComponent {
+  @Input() userName : string = "";
   donor: any = {
     user_name: '',
     last_name: '',
