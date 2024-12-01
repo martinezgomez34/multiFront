@@ -1,18 +1,18 @@
 <div [ngClass]="{'dark': isDarkMode}" class="bg-gradient-to-t from-cyan-700/50 bg-white dark:bg-black/95">
   <div class="container mx-auto p-4">
     <div class="mb-8">
-      <h1 class="text-3xl font-bold">Donaciones</h1>
+      <h1 class="text-3xl font-bold font-bold text-gray-900 dark:text-white">Donaciones</h1>
       <p class="text-gray-600 mt-2 p-5"></p>
     </div>
 
     <!-- Barra de navegación -->
-<nav class="flex justify-between items-center border-b pb-2 mb-8">
+<nav class="flex justify-between items-center pb-2 mb-8">
   <div class="flex justify-center space-x-12">
     <button
       class="pb-2 border-b-2"
       [ngClass]="{
         'text-teal-500 border-teal-500': selectedType === 'comunityNeeds',
-        'text-gray-700 border-transparent': selectedType !== 'comunityNeeds'
+        'text-gray-700 dark:text-white/80 border-transparent': selectedType !== 'comunityNeeds'
       }"
       (click)="selectType('comunityNeeds')">
       Centros comunitarios
@@ -21,7 +21,7 @@
       class="pb-2 border-b-2"
       [ngClass]="{
         'text-teal-500 border-teal-500': selectedType === 'bankNeeds',
-        'text-gray-700 border-transparent': selectedType !== 'bankNeeds'
+        'text-gray-700 dark:text-white/80 border-transparent': selectedType !== 'bankNeeds'
       }"
       (click)="selectType('bankNeeds')">
       Bancos de alimentos
@@ -30,7 +30,7 @@
       class="pb-2 border-b-2"
       [ngClass]="{
         'text-teal-500 border-teal-500': selectedType === 'sheltersNeeds',
-        'text-gray-700 border-transparent': selectedType !== 'sheltersNeeds'
+        'text-gray-700 dark:text-white/80 border-transparent': selectedType !== 'sheltersNeeds'
       }"
       (click)="selectType('sheltersNeeds')">
       Casas hogares
@@ -41,16 +41,16 @@
   <!-- Botón de filtro -->
   <div class="relative mr-40">
     <button (click)="toggleFilter()" class="flex items-center space-x-2 text-gray-700">
-      <span>Filtrar</span>
+      <span class="text-gray-900 dark:text-teal-500">Filtrar</span>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
       </svg>
     </button>
 
     <!-- Opciones de filtro -->
-    <div *ngIf="isFilterOpen" class="absolute left-10 mt-2 w-48 border rounded-lg bg-white shadow-lg z-10">
+    <div *ngIf="isFilterOpen" class="absolute top-10 left-10 mt-2 w-48 border rounded-lg bg-white shadow-lg z-10 dark:bg-black/25 ">
       <div class="p-4">
-        <label class="block mb-2">
+        <label class="block mb-2 text-gray-900 dark:text-white">
           <input
             type="checkbox"
             [value]="'money'"
@@ -58,7 +58,7 @@
             (change)="updateFilter('needType', 'money', $event)" />
           Dinero
         </label>
-        <label class="block mb-2">
+        <label class="block mb-2 text-gray-900 dark:text-white">
           <input
             type="checkbox"
             [value]="'clothes'"
@@ -66,7 +66,7 @@
             (change)="updateFilter('needType', 'clothes', $event)" />
           Ropa
         </label>
-        <label class="block mb-2">
+        <label class="block mb-2 text-gray-900 dark:text-white">
           <input
             type="checkbox"
             [value]="'food'"
@@ -74,7 +74,7 @@
             (change)="updateFilter('needType', 'food', $event)" />
           Alimentos
         </label>
-        <label class="block mb-2">
+        <label class="block mb-2 text-gray-900 dark:text-white">
           <input
             type="checkbox"
             (change)="updateFilter('urgency', true, $event)" />
@@ -83,45 +83,56 @@
         <button (click)="applyFilters()" class="mt-4 bg-teal-500 text-white py-2 px-4 rounded-lg hover:bg-teal-600">
           Aplicar filtros
         </button>
-        <button (click)="resetFilters()">reseteo</button>
+        <button class="text-center text-gray-900 dark:text-teal-500" (click)="resetFilters()">reseteo</button>
       </div>
     </div>    
   </div>
 </nav>
 
 
-<section class="space-y-4 max-w-5xl mx-auto border rounded-lg p-6">
+<section class="space-y-4 max-w-5xl mx-auto p-6">
   <!-- Mensaje de "No se encontraron resultados" -->
   <div *ngIf="noResults" class="text-center text-gray-500 mt-4">
     <h3 class="text-xl font-semibold">No se encontraron resultados</h3>
-    <p class="text-gray-400">Intenta ajustar los filtros o recargar la página.</p>
+    <p class="text-gray-500 dark:text-white/80">Intenta ajustar los filtros o recargar la página.</p>
+    <p class="text-gray-500 dark:text-white/80">Si crees que es error nuestro hazlo saber con un correo</p>
+    <p class="text-gray-600 font-semibold dark:text-teal-500">{{ourEmail}}</p>
+    <p class="text-sm text-gray-500 dark:text-white/80">Lamentamos su inconveniente, trataremos que tenga una mejor experiencia</p>
   </div>
 
   <!-- Lista de centros -->
+<div *ngIf="!noResults">
   <div
     *ngFor="let center of centers"
-    class="relative border rounded-lg p-6 flex flex-col sm:flex-row gap-6 sm:gap-8 bg-gradient-to-t from-gray-100/50">
-    <p class="absolute top-2 right-11 text-xs text-gray-500">{{ center.center_name }}</p>
+    class="relative border rounded-lg p-6 flex flex-col sm:flex-row gap-6 sm:gap-8 bg-gradient-to-t from-gray-100/20">
+    <p class="absolute top-2 right-11 text-xs text-gray-500 dark:text-white/60">{{ center.center_name }}</p>
     <!-- Imagen -->
     <div class="flex flex-col items-center sm:items-start">
       <img [src]="center.image" class="h-32 w-32 object-cover rounded-full" alt="Logo" />
     </div>
     <!-- Información -->
     <div class="flex-1 text-center sm:text-left my-4 flex flex-col justify-center">
-      <p class="text-2xl text-gray-900">{{ center.center_name | titlecase }} Solicita: {{ center.need_type | translate }}</p>
+      <p class="text-2xl text-gray-900 dark:text-white/80">{{ center.center_name | titlecase }} Solicita: {{ center.need_type | translate }}</p>
       <p class="text-gray-500">Ubicación: {{ center.address }}</p>
-      <p class="text-gray-700">Cantidad requerida: {{ center.amount_required }}</p>
+      <p class="text-gray-700 dark:text-white/60">Cantidad requerida: {{ center.amount_required }}</p>
     </div>
     <!-- Botón -->
     <div class="flex flex-col items-end mt-auto">
-      <p class="text-xs text-gray-500 my-3 right-1">Solicitud: {{ center.need_type | translate }}</p>
+      <p class="text-xs text-gray-500 my-3 right-1 dark:text-white/60">Solicitud: {{ center.need_type | translate }}</p>
       <button
           class="bg-cyan-500 text-white py-2 px-6 rounded-lg hover:bg-teal-600"
-          (click)="navigateToDonateForm(center.center_name, center.need_type)">
+          (click)="navigateToDonateForm(center.center_name, center.need_type, center.amount_required)">
           Ayudar
       </button>
     </div>
   </div>
+</div>
 </section>
   </div>
+  <div 
+  *ngIf="errorMessage" 
+  class="text-center py-8 text-red-500 dark:text-red-400 bg-white dark:bg-black/40"
+>
+  {{ errorMessage }}
+</div>
 </div>

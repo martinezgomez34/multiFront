@@ -1,69 +1,57 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="mb-8 mt-10">
-    <h1 class="text-3xl font-bold">Ranking</h1>
-  </div>
-  
-  
-  <nav class="flex justify-center space-x-12 border-b pb-2 mb-8"></nav>
-  
-</div>
-<div class="flex justify-center p-4 bg-gradient-to-t from-yellow-300/50 mt-20">
-    <div class="w-full max-w-xs"> 
+<div [ngClass]="{'dark': isDarkMode}" class="bg-gradient-to-t from-cyan-700/50 bg-white dark:from-cyan-700 dark:to-black dark:text-white">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Encabezado -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Ranking</h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-4">
+        Aquí, destacamos a aquellos individuos, empresas y organizaciones que han ido más allá en su apoyo a nuestra causa. Cada donación, sin importar su tamaño, es un paso hacia un futuro más brillante para las comunidades que más lo necesitan.
+      </p>
+    </div>
 
-
-      <div class="flex items-center mb-4 p-2 bg-gray-200 rounded-lg shadow-md">
-        <div class="flex items-center justify-center w-12 h-12 bg-yellow-400 rounded-full mr-2">
-          <span class="text-2xl text-white">🏆</span> 
+    <!-- Sección del primer puesto -->
+    <div class="flex justify-center items-center p-4 text-white mt-10 pb-20" *ngIf="topDonor">
+      <div class="flex flex-col items-center relative w-[500px] h-[300px]">
+        <div class="relative flex items-center justify-center">
+          <img [src]="topDonor.donor_image" alt="Primer Lugar" class="w-40 h-40 rounded-full object-cover" />
+          <img src="corona.png" alt="Corona" class="absolute -top-[33px] w-16 h-16 left-[98px] rotate-28" />
         </div>
-        <div>
-          <h3 class="text-lg font-semibold">Usuario A</h3>
-          <p class="text-gray-600">1er Puesto</p>
-        </div>
-      </div>
-
-      <div class="overflow-x-auto mt-20"> 
-        <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-lg text-sm">
-          <thead>
-            <tr class="bg-gray-200 text-gray-700 uppercase leading-normal">
-              <th class="py-2 px-4 text-left">Posición</th>
-              <th class="py-2 px-4 text-left">Usuario</th>
-            </tr>
-          </thead>
-          <tbody class="text-gray-600 font-light">
-            <tr class="border-b border-dashed last:border-b-0">
-              <td class="p-2">1</td>
-              <td class="p-2">Usuario A</td>
-            </tr>
-            <tr class="border-b border-dashed last:border-b-0">
-              <td class="p-2">2</td>
-              <td class="p-2">Usuario B</td>
-            </tr>
-            <tr class="border-b border-dashed last:border-b-0">
-              <td class="p-2">3</td>
-              <td class="p-2">Usuario C</td>
-            </tr>
-            <tr class="border-b border-dashed last:border-b-0">
-              <td class="p-2">4</td>
-              <td class="p-2">Usuario D</td>
-            </tr>
-            <tr class="border-b border-dashed last:border-b-0">
-              <td class="p-2">5</td>
-              <td class="p-2">Usuario E</td>
-            </tr>
-            <tr class="border-b border-dashed last:border-b-0">
-              <td class="p-2">6</td>
-              <td class="p-2">Usuario F</td>
-            </tr>
-            <tr class="border-b border-dashed last:border-b-0">
-              <td class="p-2">7</td>
-              <td class="p-2">Usuario F</td>
-            </tr>
-            <tr class="border-b border-dashed last:border-b-0">
-              <td class="p-2">8</td>
-              <td class="p-2">Usuario F</td>
-            </tr>
-          </tbody>
-        </table>
+        <h2 class="text-2xl font-semibold mt-4 text-gray-900 dark:text-white">{{ topDonor.donor_name }}</h2>
+        <p class="text-gray-200 dark:text-gray-300">{{ topDonor.total_donations }} donaciones</p>
       </div>
     </div>
+
+    <!-- Tabla del ranking -->
+    <div class="flex justify-center -mt-10" *ngIf="ranking.length > 0">
+      <div class="w-full max-w-lg">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+          <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-sm">
+            <tbody class="text-gray-600 dark:text-gray-300 font-light">
+              <tr
+                *ngFor="let donor of ranking; let i = index"
+                [ngClass]="{ 'bg-yellow-300 text-gray-800 dark:bg-yellow-500 dark:text-gray-900 font-semibold': i === 0 }"
+                class="border-t dark:border-gray-600"
+              >
+                <td class="py-3 px-4 flex items-center">
+                  <img [src]="donor.donor_image" alt="Imagen" class="w-12 h-12 rounded-full object-cover mr-2" />
+                  <img src="corona.png" alt="Corona" class="absolute  w-6 h-6 top-[644px] right-[945px] rotate-28" />
+                  <div class="flex flex-col">
+                    <span>{{ donor.donor_name }}</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">{{ donor.total_donations }} donateme</span>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-right">#{{ i + 1 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje de agradecimiento -->
+    <div class="text-center mt-20">
+      <p class="text-gray-600 dark:text-gray-400">
+        Queremos expresar nuestro más profundo agradecimiento a todos los donantes. Su apoyo no solo proporciona recursos vitales, sino que también inspira a otros a unirse a nuestra misión de crear un impacto positivo y duradero. ¡Gracias por ser parte de este viaje solidario!
+      </p>
+    </div>
   </div>
+</div>

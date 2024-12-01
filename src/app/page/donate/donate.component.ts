@@ -3,12 +3,12 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../service/api.service';
 import { TranslatePipe } from '../../pipe/translate.pipe';
+import { StateService } from '../../service/state.service';
 
 @Component({
   selector: 'app-donar',
   standalone: true,
   imports: [
-    RouterLink,
     CommonModule,
     TranslatePipe
   ],
@@ -17,16 +17,20 @@ import { TranslatePipe } from '../../pipe/translate.pipe';
 })
 export class DonateComponent implements OnInit {
   @Input() isDarkMode!: boolean;
+  ourEmail = "donate.me.infc@gmail.com";
   centers: any[] = [];
+  donorId: number | null = null
   public noResults: boolean = false; // Bandera para mostrar/ocultar el mensaje de "no resultados"
   selectedType: string = 'comunityNeeds'; // Tipo seleccionado por defecto
   isFilterOpen: boolean = false; // Controla si el filtro está abierto
   selectedFilters: { [key: string]: string | boolean } = {}; // Filtros seleccionados
+  errorMessage: string | null = null;
 
-  constructor(private centersService: ApiService, private router: Router) {}
+  constructor(private centersService: ApiService, private router: Router, private stateService: StateService) {}
 
   ngOnInit(): void {
     this.loadCenters();
+    this.donorId = this.stateService.getUserId();
   }
 
   /**
@@ -148,9 +152,12 @@ export class DonateComponent implements OnInit {
     this.loadCenters(); // Recarga los datos sin filtros
     this.isFilterOpen = false
   }
-  navigateToDonateForm(centerName: string, needType: string): void {
-    // Construye la URL dinámica y navega
-    this.router.navigate([`Donate/DonateForm/${centerName}/${needType}`]);
+  navigateToDonateForm(centerName: string, needType: string, amountRequered : string): void {
+    if (!this.donorId) {
+      this.errorMessage = "Debe iniciar secion antes de poder realizar una donacion.";
+    }else{
+      this.router.navigate([`Donate/DonateForm/${centerName}/${needType}/${amountRequered}`]);
+    }
   }
 }
 

@@ -5,7 +5,7 @@ export interface User {
     password: string; 
     is_verified: boolean;
     is_admin:boolean;
-    image:string
+    image?:string
     is_sponsor: boolean
 }
   

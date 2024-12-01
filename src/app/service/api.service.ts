@@ -356,6 +356,28 @@ export class ApiService {
   registerDonation(donorId: number, needId: number, formData: FormData): Observable<any> {
     const apiUrl = `http://127.0.0.1:8000/registerDonation/${donorId}/${needId}`;
     return this.http.post<any>(apiUrl, formData);
+  } 
+  getRanking(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/donationsRan/ranking`);
+  } 
+  getTopSponsors(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/users/sponsors3`);
+  }
+  getUserId(id : number | null): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/userId/${id}`);
+  }
+  putSponsor(email: string | null): Observable<any> {
+    return this.http.put(`${this.apiUrl}/ConvertSponsor/${email}`, {});
   }  
-}
+  getDonations(userId: number | null): Observable<any> {
+    return this.http.get(`${this.apiUrl}/donations/${userId}`);
+  }
 
+  updateDonation(userId: number | null, data: FormData): Observable<any> {
+    return this.http.put(`${this.apiUrl}/donations/${userId}`, data);
+  }
+
+  deleteDonation(userId: number | null): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/donations/${userId}/`);
+  }
+}

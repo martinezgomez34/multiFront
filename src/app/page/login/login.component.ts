@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+  @Input() isDarkMode!: boolean;
   loginForm: FormGroup;
 
   constructor(
@@ -51,14 +52,18 @@ export class LoginComponent {
             this.apiService.getUserByEmail(email).subscribe(
               (user: any) => {
                 if (user) {
-                  // Determinar el tipo de usuario
                   const userType = response.user_type || 'user';
-                  if ('is_sponsor' in user) {
-                    this.stateService.setUser(user as Donor, userType);
-                  } else if ('type_center' in user) {
-                    this.stateService.setUser(user as Center, userType);
+                  const images = response.images || '';
+                  const is_sponsor = response.is_sponsor || '';
+                  console.log('Imagen recibida en respuesta:', response.images); 
+                  console.log('Es sponsor:', is_sponsor);// Asegúrate de que recibas el tipo de usuario
+                  if ('last_name' in user.user) {
+                    this.stateService.setUser(user.user as Donor, userType, images, is_sponsor);
+                  } else if ('type_center' in user.user) {
+                    this.stateService.setUser(user.user as Center, userType, images, is_sponsor);
                   } else {
-                    this.stateService.setUser(user as User, userType);
+                    this.stateService.setUser(user.user as User, userType, images, is_sponsor);
+
                   }
                   alert('¡Inicio de sesión exitoso!');
                   this.router.navigate(['']);

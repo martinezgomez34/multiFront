@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StateService } from '../../service/state.service';
+import { LocalStorageService } from '../../service/local-storage.service';
 
 @Component({
   selector: 'app-menu',
@@ -26,11 +27,12 @@ export class MenuComponent implements OnInit {
 
   stateService = inject(StateService);
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private local : LocalStorageService) {}
 
   ngOnInit(): void {
     // Suscribirse a cambios en el tipo de usuario
     this.userType = this.stateService.userType();
+    console.log('Imagen en stateService:', this.stateService.userImage);
   }
 
   toggleMenu() {
@@ -61,5 +63,11 @@ export class MenuComponent implements OnInit {
 
   isRegularUser(): boolean {
     return this.userType === 'user';
+  }
+  getImage(): string{
+    return this.local.getUserImage()
+  }
+  getSponsor(): boolean{
+    return this.local.getUserSponsor()
   }
 }

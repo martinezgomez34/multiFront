@@ -11,6 +11,8 @@ export interface UserState {
   User: User | Donor | Center;
   isAuthenticated: boolean;
   user_type: string;
+  image: string,
+  is_sponsor: boolean
 }
 
 @Injectable({
@@ -38,46 +40,64 @@ export class StateService {
       is_sponsor: false
     },
     isAuthenticated: false,
-    user_type: '' // Inicialmente vacío
+    user_type: '',
+    image: '',
+    is_sponsor: false // Inicialmente vacío
   });
 
   // Computed para obtener los valores derivados
   readonly User = computed(() => this._state().User);
   readonly isAuthenticated = computed(() => this._state().isAuthenticated);
-  readonly userType = computed(() => this._state().user_type);
+
+  readonly userType = computed(() => this._state().user_type); // Computed para user_type
+  readonly userImage = computed(() => this._state().image || '');
+  readonly sponsor = computed(() => this._state().is_sponsor);
 
   constructor(private localStorageService: LocalStorageService, private router: Router) {
     const savedUser = this.localStorageService.getUser<User | Donor | Center>();
     const savedUserType = this.localStorageService.getUserType();
+    const savedUserImage = this.localStorageService.getUserImage();
+    const savedUserSponsor = this.localStorageService.getUserSponsor();
     if (savedUser && savedUserType) {
       this._state.update((state) => ({
         ...state,
         User: savedUser,
         isAuthenticated: true,
-        user_type: savedUserType
+        user_type: savedUserType,
+        image : savedUserImage,
+        is_sponsor: savedUserSponsor
       }));
     } else {
       // Si no hay usuario o tipo guardado, podemos llamar a `logout()` aquí
       this.logout();
     }
+    console.log('Imagen en estado actualizado:', this._state().image);
   }
 
-  // Método para actualizar el estado y guardar los datos en el almacenamiento local
-  setUser(user: User | Donor | Center, userType: string): void {
+
+  setUser(user: User | Donor | Center, userType: string, image: string, isSponsor: boolean): void {
+    console.log('Imagen recibida en setUser:', image);
+
     this._state.update((state) => {
       const updatedState = {
         ...state,
         User: user,
         isAuthenticated: true,
-        user_type: userType
+        user_type: userType,
+        image: image,
+        is_sponsor: isSponsor
       };
-      // Guardar los cambios en el localStorage
+
       this.localStorageService.setUser(user);
       this.localStorageService.setUserType(userType);
-      console.log('Updating state:', updatedState); // Verificar actualización
+      this.localStorageService.setUserImage(image);
+      this.localStorageService.setUserSponsor(isSponsor);
+      console.log('Guardando imagen en localStorage:', image);
+
       return updatedState;
     });
   }
+  
 
   // Método de logout: limpia el estado y localStorage
   logout(): void {
@@ -101,7 +121,8 @@ export class StateService {
           is_sponsor: false
         },
         isAuthenticated: false,
-        user_type: ''
+        user_type: '',
+        images: '', // Limpiar tipo de usuario
       };
     });
     this.router.navigate(['/Login']);
@@ -164,19 +185,19 @@ export class StateService {
   
   getUserId(): number | null {
     const user = this.User();
-
+    console.log('User data:', user);
     if (!user) {
+      console.error('No user found in state.');
       return null; // Si no hay un usuario logeado
     }
-
+  
     // Verificar si el objeto de usuario tiene 'user_id'
     if ('user_id' in user) {
+      console.log('User ID:', user.user_id);
       return user.user_id as number;  // Retornar el valor de user_id
     }
-
-    console.error('El usuario no tiene un ID válido.');
-    return null; // Si no se encuentra un ID válido
-  }
-
   
-}
+    console.error('El usuario no tiene un ID válido.');
+    return null;
+  }
+}  

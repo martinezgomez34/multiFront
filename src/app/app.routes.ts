@@ -15,12 +15,14 @@ import { NeedsComponent } from './page/needs/needs.component';
 import { NewsComponent } from './page/news/news.component';
 
 import { EditDonorComponent } from './page/edit-donor/edit-donor.component';
+
+import { SuscribeComponent } from './page/suscribe/suscribe.component';
+import { MyDonationComponent } from './page/my-donation/my-donation.component';
+
 import { SpecialNewsComponent } from './page/special-news/special-news.component';
 import { UpdateNewsComponent } from './page/update-news/update-news.component';
 import { DeleteNewsComponent } from './page/delete-news/delete-news.component';
 import { CreateNewsComponent } from './page/create-news/create-news.component';
-
-
 
 export const routes: Routes = [
     {
@@ -48,7 +50,7 @@ export const routes: Routes = [
         component: RegisterComponent
     },
     {
-        path: 'Donate/DonateForm/:user_name/:need_type',
+        path: 'Donate/DonateForm/:user_name/:need_type/:amound_requered',
         component: DonateFormComponent
     },
     {
@@ -70,6 +72,14 @@ export const routes: Routes = [
     {
         path: 'edit-donor',
         component:EditDonorComponent
+    },
+    {
+        path: 'suscribtion',
+        component:SuscribeComponent
+    },
+    {
+        path: 'mydonations',
+        component:MyDonationComponent
     },
     {
         path: 'SpecialNews',
