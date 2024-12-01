@@ -19,8 +19,6 @@ import { DeleteCentersComponent } from './page/delete-centers/delete-centers.com
 import { NeedsComponent } from './page/needs/needs.component';
 import { NewsComponent } from './page/news/news.component';
 
-import { EditDonorComponent } from './page/edit-donor/edit-donor.component';
-
 import { SuscribeComponent } from './page/suscribe/suscribe.component';
 import { MyDonationComponent } from './page/my-donation/my-donation.component';
 
@@ -91,8 +89,8 @@ export const routes: Routes = [
     {
         path: 'delete-centers',
         component:DeleteCentersComponent
-    }
-
+    },
+    {
         path: 'suscribtion',
         component:SuscribeComponent
     },

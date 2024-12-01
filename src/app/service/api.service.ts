@@ -271,11 +271,6 @@ updateDonor(email: string, updatedDonor: any): Observable<any> {
     );
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('An error occurred:', error.error);
-    return throwError(() => new Error('Something went wrong; please try again later.'));
-  }
-
 
   getNewsS(): Observable<any[]> {
     return this.http.get<any>('http://127.0.0.1:8000/news/special').pipe(
