@@ -20,3 +20,4 @@ export class Translate2Pipe implements PipeTransform {
   }
 
 }
+

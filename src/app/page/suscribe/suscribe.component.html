@@ -1,0 +1,39 @@
+<div [ngClass]="{'dark': isDarkMode}" class="min-h-screen flex flex-col items-center bg-gradient-to-t from-cyan-700/50 bg-white dark:bg-black/95">
+    <!-- Encabezado, descripción y logo alineados horizontalmente -->
+    <div class="flex items-center justify-center space-x-16 mt-8">
+        <div class="flex flex-col items-start max-w-lg mt-8">
+          <h2 class="text-3xl font-bold text-black dark:text-white/70">
+            Desbloquea algunas ventajas siendo un usuario
+            <span class="text-cyan-700">Donateme</span>
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400 mt-4 text-lg">
+            Conviértete en un usuario Donateme para contribuir con nosotros directamente y recibir unos cuantos beneficios.
+          </p>
+        </div>
+        <img src="logos.png" alt="Logo de corazón" class="w-60 h-60">
+      </div>      
+  
+      <div class="mt-12 bg-gradient-to-br from-[#E3C1FC] via-[#ACB7DE] to-cyan-700 dark:from-[#A36CCC] dark:via-[#878FCA] dark:to-cyan-800 rounded-lg p-6 w-full max-w-2xl mx-auto">
+      <h3 class="text-white text-2xl font-bold">Donateme</h3>
+      <ul class="mt-4 space-y-4 text-white text-lg">
+        <li class="flex items-center">
+          <span class="font-bold text-2xl">+10</span>
+          <span class="ml-3">puntos en el ranking.</span>
+        </li>
+        <li class="flex items-center">
+          <img src="user.png" alt="Icono usuario" class="w-6 h-6 mr-3">
+          Perfiles personalizados.
+        </li>
+        <li class="flex items-center">
+          <img src="emoticon.png" alt="Icono reconocimiento" class="w-6 h-6 mr-3">
+          Reconocimiento dentro de la app.
+        </li>
+      </ul>
+      <app-paypal-button 
+        class="ml-3"
+        [amount]="28" 
+        (paymentCompleted)="onPaymentCompleted()">
+      </app-paypal-button>
+    </div>
+  </div>
+  

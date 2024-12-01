@@ -1,0 +1,53 @@
+<!-- create-news.component.html -->
+<div class="news-form-container">
+    <h2>Crear Nueva Noticia</h2>
+  
+    <!-- Formulario para crear una noticia -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+      
+      <!-- Título de la noticia -->
+      <div class="form-group">
+        <label for="title">Título</label>
+        <input id="title" type="text" formControlName="title">
+        <div *ngIf="form.get('title')?.hasError('required')" class="error-message">
+          El título es obligatorio.
+        </div>
+      </div>
+  
+      <!-- Contenido de la noticia -->
+      <div class="form-group">
+        <label for="content">Contenido</label>
+        <textarea id="content" formControlName="content"></textarea>
+        <div *ngIf="form.get('content')?.hasError('required')" class="error-message">
+          El contenido es obligatorio.
+        </div>
+      </div>
+  
+      <!-- Estado de la noticia -->
+      <div class="form-group">
+        <label for="status">Estado</label>
+        <select id="status" formControlName="status">
+          <option value="urgent">Urgente</option>
+          <option value="priority">Prioridad</option>
+          <option value="events">Eventos</option>
+          <option value="common">Común</option>
+        </select>
+        <div *ngIf="form.get('status')?.hasError('required')" class="error-message">
+          El estado es obligatorio.
+        </div>
+      </div>
+  
+      <!-- Imagen de la noticia -->
+      <div class="form-group">
+        <label for="image">Imagen</label>
+        <input id="image" type="file" (change)="onImageSelected($event)">
+        <div *ngIf="selectedImage && selectedImage.size > 0" class="image-preview">
+          <p>Imagen seleccionada: {{ selectedImage.name }}</p>
+        </div>
+      </div>
+  
+      <!-- Botón para enviar la noticia -->
+      <button type="submit" [disabled]="form.invalid">Crear Noticia</button>
+    </form>
+  </div>
+  

@@ -9,4 +9,6 @@ export interface Donor{
     contact_social_media: string
     contact_others: string
     address: string
+    image?:string
+    is_sponsor: boolean
 }

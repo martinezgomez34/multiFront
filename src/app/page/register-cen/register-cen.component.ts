@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../service/api.service';
 import { Router, RouterLink } from '@angular/router';
+import { gmailValidator } from '../register/register.component';
 
 @Component({
   selector: 'app-register-cen',
@@ -15,6 +16,7 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './register-cen.component.scss'
 })
 export class RegisterCenComponent {
+  @Input() isDarkMode!: boolean;
   form: FormGroup;
   selectedFile: File | null = null;
   
@@ -25,7 +27,7 @@ export class RegisterCenComponent {
   ) {
     this.form = this.fb.group({
       user_name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email, gmailValidator]],
       password: ['', Validators.required],
       type_center: ['', Validators.required],
       needs: [''],
@@ -34,15 +36,26 @@ export class RegisterCenComponent {
       contact_others: [''],
       address: ['', Validators.required],
     });
+    this.form.get('contact_phone_number')?.valueChanges.subscribe((value) => {
+      if (value && !value.startsWith('+52 ')) {
+        this.form.get('contact_phone_number')?.setValue('+52 ' + value, { emitEvent: false });
+      }
+    });
   }
   
+
   onFileSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
-      this.selectedFile = fileInput.files[0];
-      console.log('Archivo seleccionado:', this.selectedFile);
+        const file = fileInput.files[0];
+        const allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
+        if (allowedTypes.includes(file.type)) {
+            this.selectedFile = file;
+        } else {
+            fileInput.value = '';
+        }
     }
-  }
+}
   
   onSubmit(): void {
     if (this.form.valid) {

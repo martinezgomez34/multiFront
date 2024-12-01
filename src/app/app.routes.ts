@@ -16,6 +16,19 @@ import { AdminUsersComponent } from './page/admin-users/admin-users.component';
 import { DeleteCentersComponent } from './page/delete-centers/delete-centers.component';
 
 
+import { NeedsComponent } from './page/needs/needs.component';
+import { NewsComponent } from './page/news/news.component';
+
+import { EditDonorComponent } from './page/edit-donor/edit-donor.component';
+
+import { SuscribeComponent } from './page/suscribe/suscribe.component';
+import { MyDonationComponent } from './page/my-donation/my-donation.component';
+
+import { SpecialNewsComponent } from './page/special-news/special-news.component';
+import { UpdateNewsComponent } from './page/update-news/update-news.component';
+import { DeleteNewsComponent } from './page/delete-news/delete-news.component';
+import { CreateNewsComponent } from './page/create-news/create-news.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -42,7 +55,7 @@ export const routes: Routes = [
         component: RegisterComponent
     },
     {
-        path: 'Donate/DonateForm',
+        path: 'Donate/DonateForm/:user_name/:need_type/:amound_requered',
         component: DonateFormComponent
     },
     {
@@ -54,10 +67,20 @@ export const routes: Routes = [
         component:VerifyemailComponent
     },
     {
+        path: 'Needs',
+        component:NeedsComponent
+    },
+    {
+        path: 'NewsCenter',
+        component:NewsComponent
+    },
+    {
+
         path: 'edit-donor',
         component:EditDonorComponent
     },
     {
+
         path: 'edit-center',
         component:EditCenterComponent
     },
@@ -69,4 +92,29 @@ export const routes: Routes = [
         path: 'delete-centers',
         component:DeleteCentersComponent
     }
+
+        path: 'suscribtion',
+        component:SuscribeComponent
+    },
+    {
+        path: 'mydonations',
+        component:MyDonationComponent
+    },
+    {
+        path: 'SpecialNews',
+        component:SpecialNewsComponent
+    },
+    {
+        path: 'UpdateNews',
+        component:UpdateNewsComponent
+    },
+    {
+        path: 'NewsCenter/DeleteNews',
+        component:DeleteNewsComponent
+    },
+    {
+        path: 'CreateNews',
+        component:CreateNewsComponent
+    },
+
 ];

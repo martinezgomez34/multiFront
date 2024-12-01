@@ -1,0 +1,20 @@
+<div>
+    <h1>CRUD de Necesidades</h1>
+  
+    <form [formGroup]="needForm" (ngSubmit)="onSubmit()">
+      <label for="type_need">Tipo de Necesidad:</label>
+      <select formControlName="type_need" id="type_need">
+        <option value="clothes">Ropa</option>
+        <option value="food">Comida</option>
+        <option value="money">Dinero</option>
+      </select>
+  
+      <label for="amount_required">Cantidad Requerida:</label>
+      <input type="number" formControlName="amount_required" id="amount_required">
+  
+      <label for="urgency">Urgente:</label>
+      <input type="checkbox" formControlName="urgency" id="urgency">
+  
+      <button type="submit">{{ updateMode ? 'Actualizar Necesidad' : 'Registrar Necesidad' }}</button>
+</form>
+  

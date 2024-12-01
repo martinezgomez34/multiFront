@@ -1,0 +1,96 @@
+<div class="bg-gradient-to-b from-white to-cyan-700/50 dark:from-black dark:to-cyan-800 min-h-screen flex flex-col justify-center items-center">
+    <ng-container *ngIf="donations && donations.length > 0; else noDonations">
+      <div
+        *ngFor="let donation of donations"
+        class="donation-card rounded-lg p-4 sm:p-6 flex flex-col sm:flex-row gap-4 sm:gap-6 bg-white/40 dark:bg-black/40 shadow-md max-w-4xl mx-auto mb-4"
+      >
+        <!-- Detalles de la donación -->
+        <div class="donation-details flex-1">
+          <p class="text-gray-900 dark:text-gray-200 font-semibold">
+            <strong>Tipo de donación:</strong> {{ donation.type_donation }}
+          </p>
+          <p class="text-gray-700 dark:text-gray-400">
+            <strong>Cantidad donada:</strong> {{ donation.amount }}
+          </p>
+          <p class="text-gray-700 dark:text-gray-400">
+            <strong>Comentario:</strong>
+          </p>
+          <textarea
+            [(ngModel)]="donation.comentary"
+            [readonly]="!donation.isEditing || donation.complete"
+            class="comment-input w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700"
+            rows="3"
+          ></textarea>
+          <p class="text-gray-700 dark:text-gray-400">
+            <strong>Estado:</strong> {{ donation.complete ? 'Completada' : 'Sin completar' }}
+          </p>
+        </div>
+  
+        <!-- Imagen de la donación -->
+        <div class="donation-image flex flex-col items-center sm:w-1/3">
+          <label
+            for="image-{{ donation.donation_id }}"
+            class="text-gray-900 dark:text-gray-200 mb-2 text-sm sm:text-base"
+          >
+            Imagen:
+          </label>
+          <input
+            type="file"
+            id="image-{{ donation.donation_id }}"
+            (change)="onFileChange($event, donation)"
+            [disabled]="!donation.isEditing || donation.complete"
+            class="file-input mb-3 text-gray-600 dark:text-gray-300 dark:bg-gray-800 w-full sm:w-auto text-xs sm:text-sm"
+          />
+          <img
+            *ngIf="donation.image"
+            [src]="donation.image"
+            alt="Imagen de la donación"
+            class="donation-img h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-lg shadow-md"
+          />
+          <label *ngIf="!donation.image" class="text-gray-500 dark:text-gray-300">
+            Sin imagen
+          </label>
+        </div>
+  
+        <!-- Acciones de la donación -->
+        <div
+          class="donation-actions flex flex-col items-end justify-between mt-4 sm:mt-0 sm:ml-auto w-full sm:w-auto"
+        >
+          <button
+            *ngIf="!donation.isEditing && !donation.complete"
+            (click)="enableEdit(donation)"
+            class="edit-btn bg-cyan-500 text-white py-2 px-4 rounded-lg hover:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-700 w-full sm:w-auto"
+          >
+            Editar
+          </button>
+          <button
+            *ngIf="donation.isEditing && !donation.complete"
+            (click)="saveChanges(donation)"
+            class="save-btn bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 w-full sm:w-auto"
+          >
+            Guardar
+          </button>
+          <button
+            *ngIf="!donation.complete"
+            (click)="deleteDonation(donation.donation_id)"
+            class="delete-btn bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 mt-2 w-full sm:w-auto"
+          >
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  
+    <!-- Mensaje para cuando no hay donaciones -->
+    <ng-template #noDonations>
+      <div class="text-center">
+        <h1 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
+          No hay donaciones disponibles.
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-2">
+          ¡Aún no se ha registrado ninguna donación!
+        </p>
+      </div>
+    </ng-template>
+  </div>
+  

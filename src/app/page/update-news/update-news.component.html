@@ -1,0 +1,27 @@
+<form [formGroup]="updateNewsForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="title">Title:</label>
+    <input id="title" formControlName="title" type="text" required />
+  </div>
+
+  <div>
+    <label for="content">Content:</label>
+    <textarea id="content" formControlName="content" required></textarea>
+  </div>
+
+  <div>
+    <label for="status">Status:</label>
+    <select id="status" formControlName="status" required>
+      <option value="urgent">Urgent</option>
+      <option value="priority">Priority</option>
+      <option value="events">Events</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="image">Image:</label>
+    <input id="image" type="file" />
+  </div>
+
+  <button type="submit">Update News</button>
+</form>
