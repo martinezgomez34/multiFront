@@ -1,6 +1,13 @@
-<div class="bg-gradient-to-t from-cyan-700/50 p-10">
+<div [ngClass]="{'dark': isDarkMode}"
+class="flex-1 flex items-center justify-center bg-gradient-to-b from-white to-cyan-700/50 dark:from-black dark:to-cyan-800 min-h-screen">
   <div class="max-w-xl mx-auto m-8 p-14">
-    <img src="Logo.png" class="mx-auto h-48 sm:h-60 mb-8" alt="Logo" />
+    <div class="flex-shrink-0 sm:mt-0 ">
+      @if (isDarkMode) {
+        <img src="Logo02.png" class="h-14 sm:h-20 w-auto" alt="Logo de Donaciones" />
+      }@else {
+        <img src="Logo01.png" class="h-14 sm:h-20 w-auto" alt="Logo de Donaciones" />
+      }
+    </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="w-full mb-6">
         <label class="block text-sm text-black mb-2" for="user_name"></label>
@@ -18,10 +25,18 @@
 
       <div class="w-full mb-6">
         <label class="block text-sm text-black mb-2" for="email"></label>
-        <input formControlName="email" 
-               class="w-full px-6 py-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:bg-sky-100" 
-               type="email" id="email" placeholder="Correo Electrónico" required>
-      </div>
+        <input 
+          formControlName="email" 
+          class="w-full px-6 py-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:bg-sky-100" 
+          type="email" id="email" placeholder="Correo Electrónico" required>
+      
+        <!-- Mensajes de error -->
+        <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="text-red-500 text-sm mt-1">
+          <p *ngIf="form.get('email')?.hasError('required')">El correo es obligatorio.</p>
+          <p *ngIf="form.get('email')?.hasError('email')">Formato de correo inválido.</p>
+          <p *ngIf="form.get('email')?.hasError('gmailOnly')">Solo se permiten correos de Gmail (gmail.com).</p>
+        </div>
+      </div>          
 
       <div class="w-full mb-6">
         <label class="block text-sm text-black mb-2" for="password"></label>
@@ -43,16 +58,21 @@
                id="image" 
                (change)="onFileSelected($event)" 
                class="w-full px-6 py-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:bg-sky-100" 
-               accept="image/*">
-      </div>
+               accept="image/png, image/jpeg, image/webp">
+    </div>      
       
       <div class="w-full flex justify-center mb-6">
         <button type="submit" class="px-14 py-3 text-white font-light tracking-wider bg-cyan-600 hover:bg-gray-800 rounded-lg">
           Registrar
         </button>
-      <a routerLink="/rescenter">center</a>
       </div>
-      <div class="text-center mt-4"> <p class="text-sm text-black"> ¿Quieres registrar tu centro? <a routerLink="RegisterCenter" class="text-cyan-600 hover:underline"> Regístralo aquí </a> </p> </div>
+      <div class="text-center mt-4"> <p class="text-sm text-black dark: text-white"> ¿Quieres registrar tu centro? <a routerLink="/rescenter" class="text-cyan-600 hover:underline"> Regístralo aquí </a> </p> </div>
     </form>
   </div>
+  <div 
+  *ngIf="erroMesage" 
+  class="text-center py-8 text-red-500 dark:text-red-400 bg-white dark:bg-black/90"
+>
+  {{ erroMesage }}
+</div>
 </div>

@@ -8,6 +8,8 @@ export interface UserState {
   User: User | Donor | Center; 
   isAuthenticated: boolean;
   user_type: string;
+  image: string,
+  is_sponsor: boolean
 }
 
 @Injectable({
@@ -21,44 +23,58 @@ export class StateService {
       password: '',
       is_verified: false,
       is_admin: false,
-      image: '',
       is_sponsor: false
     },
     isAuthenticated: false,
-    user_type: '' // Inicialmente vacío
+    user_type: '',
+    image: '',
+    is_sponsor: false // Inicialmente vacío
   });
 
   readonly User = computed(() => this._state().User);
   readonly isAuthenticated = computed(() => this._state().isAuthenticated);
   readonly userType = computed(() => this._state().user_type); // Computed para user_type
+  readonly userImage = computed(() => this._state().image || '');
+  readonly sponsor = computed(() => this._state().is_sponsor);
 
   constructor(private localStorageService: LocalStorageService) {
     const savedUser = this.localStorageService.getUser<User | Donor | Center>();
     const savedUserType = this.localStorageService.getUserType();
+    const savedUserImage = this.localStorageService.getUserImage();
+    const savedUserSponsor = this.localStorageService.getUserSponsor();
     if (savedUser && savedUserType) {
       this._state.update((state) => ({
         ...state,
         User: savedUser,
         isAuthenticated: true,
-        user_type: savedUserType
+        user_type: savedUserType,
+        image : savedUserImage,
+        is_sponsor: savedUserSponsor
       }));
     }
+    console.log('Imagen en estado actualizado:', this._state().image);
   }
 
-  setUser(user: User | Donor | Center, userType: string): void {
+  setUser(user: User | Donor | Center, userType: string, image: string, isSponsor: boolean): void {
+    console.log('Imagen recibida en setUser:', image);
     this._state.update((state) => {
       const updatedState = {
         ...state,
         User: user,
         isAuthenticated: true,
-        user_type: userType
+        user_type: userType,
+        image: image,
+        is_sponsor: isSponsor
       };
-      console.log('Updating state:', updatedState); 
-      this.localStorageService.setUser(user)
-      this.localStorageService.setUserType(userType)
+      this.localStorageService.setUser(user);
+      this.localStorageService.setUserType(userType);
+      this.localStorageService.setUserImage(image);
+      this.localStorageService.setUserSponsor(isSponsor);
+      console.log('Guardando imagen en localStorage:', image);
       return updatedState;
     });
   }
+  
 
   logout(): void {
     this._state.update((state) => {
@@ -75,7 +91,8 @@ export class StateService {
           is_sponsor: false
         },
         isAuthenticated: false,
-        user_type: '' // Limpiar tipo de usuario
+        user_type: '',
+        images: '', // Limpiar tipo de usuario
       };
     });
   }
@@ -107,17 +124,19 @@ export class StateService {
   
   getUserId(): number | null {
     const user = this.User();
-
+    console.log('User data:', user);
     if (!user) {
+      console.error('No user found in state.');
       return null; // Si no hay un usuario logeado
     }
-
+  
     // Verificar si el objeto de usuario tiene 'user_id'
     if ('user_id' in user) {
+      console.log('User ID:', user.user_id);
       return user.user_id as number;  // Retornar el valor de user_id
     }
-
+  
     console.error('El usuario no tiene un ID válido.');
-    return null; // Si no se encuentra un ID válido
+    return null;
   }
-}
+}  

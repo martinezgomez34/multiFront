@@ -1,0 +1,30 @@
+<div [ngClass]="{ 'dark': isDarkMode }" class="fixed inset-0 flex items-center justify-center z-50">
+    <div
+      class="absolute inset-0 bg-black/40 !dark:bg-black/60 backdrop-blur-sm"
+      (click)="closeDialog()"
+    ></div>
+  
+    <div
+      class="relative w-96 p-6 bg-gradient-to-b from-white to-cyan-700/50 dark:from-black dark:to-cyan-800 rounded-lg shadow-lg z-10"
+    >
+      <div class="flex justify-center items-center relative mb-4">
+        <img
+          [src]="isDarkMode ? 'Logo02.png' : 'Logo01.png'"
+          alt="Logo"
+          class="h-10 mx-auto"
+        />
+      </div>
+
+      <div class="mt-4 text-center">
+        <h2 class="text-base font-bold text-gray-900 dark:text-white">
+            ¡Gracias por ser un miembro 
+            <span class="text-cyan-600">Donateme</span>
+            !
+          </h2>          
+        <p class="mt-2 text-sm text-gray-900 dark:text-gray-300">
+          Toque cualquier espacio de la pantalla, cuando lo haga tendra que iniciar secion de nuevo para aplicar sus beneficios.
+        </p>
+      </div>
+    </div>
+  </div>
+  

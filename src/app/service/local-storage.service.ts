@@ -56,4 +56,31 @@ export class LocalStorageService {
   getUserType(): string | null {
     return this.isLocalStorageAvailable() ? localStorage.getItem('user_type') : null;
   }
+  setUserImage(userImage: string): void {
+    if (this.isLocalStorageAvailable()) {
+      localStorage.setItem('images', userImage);
+    }
+  }
+  getUserImage(): string {
+    const baseUrl = "http://127.0.0.1:8000";
+    const imagePath = this.isLocalStorageAvailable() ? localStorage.getItem('images') : null;
+    return imagePath ? `${baseUrl}${imagePath}` : ''; 
+  }  
+  setUserSponsor(is_sponsor: boolean): void {
+    if (this.isLocalStorageAvailable()) {
+      // Convertir el booleano a cadena
+      localStorage.setItem('is_sponsor', is_sponsor.toString());
+    }
+  }
+  
+  getUserSponsor(): boolean {
+    // Verifica si estamos en el navegador antes de intentar acceder a localStorage
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const isSponsor = localStorage.getItem('is_sponsor');
+      console.log(isSponsor);
+      
+      return isSponsor === 'true';  // Si el valor es 'true' (como cadena), devolver true
+    }
+    return false; // Si no estamos en el navegador, devuelve un valor predeterminado
+  }  
 }
