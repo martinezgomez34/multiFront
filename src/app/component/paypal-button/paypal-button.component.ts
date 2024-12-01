@@ -47,6 +47,14 @@ export class PaypalButtonComponent implements AfterViewInit {
         onError: (err: any) => {
           console.error('Error durante el pago:', err);
         },
+        style: {
+          layout: 'vertical',  // Estilo del botón (vertical o horizontal)
+          color: 'blue',       // Color del botón
+          shape: 'rect',       // Forma del botón (rectangular o redondo)
+          size: 'responsive',  // Tamaño del botón
+          label: 'pay',        // Etiqueta del botón (pay, checkout, etc.)
+          fundingicons: true,  // Si quieres mostrar los iconos de los métodos de pago
+        }
       }).render('#paypal-button-container');
     }).catch((error) => {
       console.error(error);

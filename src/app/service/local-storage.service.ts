@@ -16,13 +16,20 @@ export class LocalStorageService {
   }
 
   getDarkMode(): boolean {
-    const darkMode = this.getItem('darkMode');
-    return darkMode === 'true';  // Devuelve true si el valor en localStorage es 'true'
+    // Verifica si estamos en el navegador
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      const darkMode = localStorage.getItem('darkMode');
+      return darkMode === 'true';  // Devuelve true si el valor de localStorage es 'true'
+    }
+    return false;  // Si no estamos en el navegador, devuelve un valor predeterminado
   }
-
+  
   setDarkMode(isDark: boolean): void {
-    this.setItem('darkMode', isDark.toString());  // Almacena 'true' o 'false' como string
-  }
+    // Verifica si estamos en el navegador
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      localStorage.setItem('darkMode', isDark.toString());  // Almacena 'true' o 'false' como string
+    }
+  }  
 
   getItem(key: string): string | null {
     if (this.isLocalStorageAvailable()) {

@@ -125,7 +125,6 @@ export class StateService {
         images: '', // Limpiar tipo de usuario
       };
     });
-    this.router.navigate(['/Login']);
   }
 
   // Método para verificar si el usuario es un donante
