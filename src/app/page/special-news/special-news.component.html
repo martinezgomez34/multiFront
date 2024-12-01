@@ -1,0 +1,10 @@
+<form [formGroup]="specialNewsForm" (ngSubmit)="onSubmit()">
+    <label for="title">Title:</label>
+    <input id="title" formControlName="title" type="text" required />
+    
+    <label for="image">Image:</label>
+    <input id="image" #imageInput type="file" required />
+    
+    <button type="submit">Submit</button>
+  </form>
+  

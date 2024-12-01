@@ -15,6 +15,15 @@ export class LocalStorageService {
     }
   }
 
+  getDarkMode(): boolean {
+    const darkMode = this.getItem('darkMode');
+    return darkMode === 'true';  // Devuelve true si el valor en localStorage es 'true'
+  }
+
+  setDarkMode(isDark: boolean): void {
+    this.setItem('darkMode', isDark.toString());  // Almacena 'true' o 'false' como string
+  }
+
   getItem(key: string): string | null {
     if (this.isLocalStorageAvailable()) {
       return localStorage.getItem(key);

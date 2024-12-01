@@ -45,38 +45,33 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
       this.apiService.loginUser(email, password).subscribe(
-        (response) => {
+        (response: any) => {
           if (response && response.access_token) {
+            localStorage.setItem('token', response.access_token);
             this.apiService.getUserByEmail(email).subscribe(
-              (user) => {
+              (user: any) => {
                 if (user) {
-                  // Asegúrate de que recibes el tipo de usuario
-                  const userType = response.user_type || 'user'; 
-  
-                  // Determina el tipo de usuario basado en las propiedades del objeto 'user'
+                  // Determinar el tipo de usuario
+                  const userType = response.user_type || 'user';
                   if ('is_sponsor' in user) {
-                    // Si el usuario tiene la propiedad 'is_sponsor', lo tratamos como Donor
                     this.stateService.setUser(user as Donor, userType);
                   } else if ('type_center' in user) {
-                    // Si el usuario tiene la propiedad 'type_center', lo tratamos como Center
                     this.stateService.setUser(user as Center, userType);
                   } else {
-                    // Si no coincide con los anteriores, lo tratamos como User
                     this.stateService.setUser(user as User, userType);
                   }
-  
                   alert('¡Inicio de sesión exitoso!');
                   this.router.navigate(['']);
                 }
               },
-              (error) => {
+              error => {
                 console.error('Error fetching user:', error);
                 alert('No se pudo obtener los datos del usuario. Inténtalo de nuevo.');
               }
             );
           }
         },
-        (error) => {
+        error => {
           console.error('Login error:', error);
           if (error.status === 401 && error.error.detail === 'Contraseña incorrecta') {
             alert('La contraseña ingresada es incorrecta. Por favor, verifica e intenta nuevamente.');

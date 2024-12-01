@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { donor, User, NewsItem } from '../models/user/user';
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { Resource } from '../models/resource';
-import { News } from '../models/news';
+import { News, NewsResponse } from '../models/news';
+import { StateService } from './state.service';
 
 
 @Injectable({
@@ -14,7 +16,70 @@ import { News } from '../models/news';
 export class ApiService {
   private apiUrl = 'http://127.0.0.1:8000';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private stateService: StateService) {}
+
+  // Login de usuario
+  loginUser(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
+      catchError((error) => {
+        console.error('Error al iniciar sesión', error);
+        return throwError(() => error);
+      })
+    );
+  }
+  // Crear noticia
+  createNews(news: any) { 
+    const token = this.stateService.getToken(); 
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`); 
+    return this.http.post(`${this.apiUrl}/news`, news, { headers }); 
+  }
+
+  createSpecialNews(title: string, image: File) {
+    const token = this.stateService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    const formData: FormData = new FormData();
+    formData.append('title', title);
+    formData.append('image', image);
+
+    return this.http.post(`${this.apiUrl}/news/special`, formData, { headers });
+  }
+
+  updateNews(newsId: string, newsData: any) {
+    const token = this.stateService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put(`${this.apiUrl}/news/${newsId}`, newsData, { headers });
+  }
+
+  deleteNews(newsId: string) {
+    const token = this.stateService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete(`${this.apiUrl}/news/${newsId}`, { headers });
+  }
+
+  getNews() {
+    return this.http.get<any[]>(`${this.apiUrl}/news`);
+  }
+
+  getNewsByCenterEmail(centerEmail: string, page: number = 1, pageSize: number = 10): Observable<NewsResponse> {
+    return this.http.get<NewsResponse>(`${this.apiUrl}/news`, {
+      params: {
+        center_email: centerEmail,
+        page: page.toString(),
+        page_size: pageSize.toString()
+      }
+    });
+  }
+
+  getNewsWithContent(centerEmail: string, page: number = 1, pageSize: number = 10): Observable<NewsResponse> {
+    return this.http.get<NewsResponse>(`${this.apiUrl}/news/with_content`, {
+      params: {
+        center_email: centerEmail,
+        page: page.toString(),
+        page_size: pageSize.toString()
+      }
+    });
+  }
 
   // Registrar usuario
   registerUser(user: any): Observable<any> {
@@ -49,33 +114,22 @@ export class ApiService {
       })
     );
   }
-
-
-// Editar donante
-updateDonor(email: string, updatedDonor: any): Observable<any> {
-  const formData = new FormData();
-  formData.append('user_name', updatedDonor.user_name);
-  formData.append('last_name', updatedDonor.last_name);
-  formData.append('new_email', updatedDonor.email);  // Actualiza con el nuevo email si es necesario
-  formData.append('password', updatedDonor.password);
-  formData.append('phone_number', updatedDonor.phone_number);
-  if (updatedDonor.image) {
-    formData.append('image', updatedDonor.image, updatedDonor.image.name);
-  }
-
-  return this.http.put(`${this.apiUrl}/updateDonors/${email}`, formData).pipe(
-    catchError((error) => {
-      console.error('Error al actualizar donante', error);
-      return throwError(() => error);
-    })
-  );
-}
-
-  // Login de usuario
-  loginUser(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
+  
+  // Editar donante
+  updateDonor(email: string, updatedDonor: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('user_name', updatedDonor.user_name);
+    formData.append('last_name', updatedDonor.last_name);
+    formData.append('new_email', updatedDonor.email);  // Actualiza con el nuevo email si es necesario
+    formData.append('password', updatedDonor.password);
+    formData.append('phone_number', updatedDonor.phone_number);
+    if (updatedDonor.image) {
+      formData.append('image', updatedDonor.image, updatedDonor.image.name);
+    }
+  
+    return this.http.put(`${this.apiUrl}/updateDonors/${email}`, formData).pipe(
       catchError((error) => {
-        console.error('Error al iniciar sesión', error);
+        console.error('Error al actualizar donante', error);
         return throwError(() => error);
       })
     );
@@ -225,22 +279,49 @@ updateDonor(email: string, updatedDonor: any): Observable<any> {
   }
 
   getNewsS(): Observable<any[]> {
-    return this.http.get<any>('http://127.0.0.1:8000/news/secret').pipe(
+    return this.http.get<any>('http://127.0.0.1:8000/news/special').pipe(
       map((response) => {
         if (response && Array.isArray(response.data)) {
-          return response.data.map((item: any) => item.image);
+          return response.data.map((item: any) => ({
+            title: item.title,  // Añadimos el título
+            image: item.image   // Y la imagen
+          }));
         } else if (Array.isArray(response)) {
-          return response.map((item: any) => item.imageUrl || item.image);
+          return response.map((item: any) => ({
+            title: item.title || 'Título por defecto',  // Si no existe un título, usamos un valor por defecto
+            image: item.imageUrl || item.image
+          }));
         } else {
           return [];
         }
       }),
       catchError((error) => {
-        console.error('Error fetching images:', error);
-        return of([]); 
+        console.error('Error fetching data:', error);
+        return of([]); // Devuelve un array vacío en caso de error
       })
     );
   }
+
+  // Método para obtener las noticias especiales
+  getSpecialNews(page: number = 1, pageSize: number = 10): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/news/special?page=${page}&page_size=${pageSize}`).pipe(
+      catchError((error) => {
+        console.error('Error al obtener noticias especiales', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  // Método para obtener las noticias secretas
+  getSecretNews(page: number = 1, pageSize: number = 10): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/news/secret?page=${page}&page_size=${pageSize}`).pipe(
+      catchError((error) => {
+        console.error('Error al obtener noticias secretas', error);
+        return throwError(() => error);
+      })
+    );
+  }
+  
   getComunityNeeds(): Observable<any> {
     return this.http.get(`${this.apiUrl}/centers/comunityNeeds`);
   }
@@ -277,3 +358,4 @@ updateDonor(email: string, updatedDonor: any): Observable<any> {
     return this.http.post<any>(apiUrl, formData);
   }  
 }
+

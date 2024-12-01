@@ -177,4 +177,6 @@ export class StateService {
     console.error('El usuario no tiene un ID válido.');
     return null; // Si no se encuentra un ID válido
   }
+
+  
 }
