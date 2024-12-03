@@ -11,6 +11,7 @@ import { Donor } from '../../models/donor';
 import { Center } from '../../models/center';
 import { User } from '../../models/user/user';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -65,25 +66,52 @@ export class LoginComponent {
                     this.stateService.setUser(user.user as User, userType, images, is_sponsor);
 
                   }
-                  alert('¡Inicio de sesión exitoso!');
+                  Swal.fire({
+                    title: '¡Bienvenido!',
+                    text: 'Has iniciado sesión correctamente.',
+                    icon: 'success',
+                    background: 'linear-gradient(to bottom, #006064, #000000)', // gradiente de cian oscuro a negro
+                    color: 'white', // texto blanco
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#0097a7', // botón cian más oscuro
+                    customClass: {
+                      title: 'text-xl font-semibold', // título grande y negrita
+                      popup: 'text-lg', // contenido de la alerta
+                    },
+                  });
                   this.router.navigate(['']);
                 }
+                
               },
               error => {
                 console.error('Error fetching user:', error);
-                alert('No se pudo obtener los datos del usuario. Inténtalo de nuevo.');
+                
+
               }
+
             );
           }
         },
         error => {
           console.error('Login error:', error);
           if (error.status === 401 && error.error.detail === 'Contraseña incorrecta') {
-            alert('La contraseña ingresada es incorrecta. Por favor, verifica e intenta nuevamente.');
+            Swal.fire("Credenciales incorrectas");
           } else if (error.status === 401) {
-            alert('Credenciales incorrectas. Verifica tu correo electrónico o contraseña.');
+            Swal.fire("Credenciales incorrectas");
           } else {
-            alert('Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde.');
+            Swal.fire({
+              title: '¡Error!',
+              text: 'Credenciales incorrectas',
+              icon: 'error',
+              background: 'linear-gradient(to bottom, #006064, #000000)', // gradiente de cian oscuro a negro
+              color: 'white',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#0097a7',
+              customClass: {
+                title: 'text-xl font-semibold',
+                popup: 'text-lg',
+              },
+            });
           }
         }
       );

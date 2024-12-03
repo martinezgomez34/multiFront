@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../service/api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-delete-centers',
@@ -30,7 +31,6 @@ export class DeleteCentersComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar los centros:', err);
-        alert('Error al cargar los centros. Intente nuevamente.');
       }
     });
   }
@@ -55,24 +55,55 @@ export class DeleteCentersComponent implements OnInit {
   }
 
   confirmDeleteCenter(email: string): void {
-    const confirmed = confirm(
-      '¿Estás seguro de que deseas eliminar este centro? Esto eliminará el centro y sus necesidades, pero conservará las donaciones asociadas.'
-    );
-    if (confirmed) {
-      this.deleteCenter(email);
-    }
-  }
-
-  deleteCenter(email: string): void {
-    this.apiService.deleteCenter(email).subscribe({
-      next: (response) => {
-        alert('Centro eliminado exitosamente.');
-        this.loadCenters(); // Recargar los centros
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `Esto eliminará el centro y sus necesidades asociadas, pero conservará las donaciones relacionadas.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#00bcd4', // Botón cian
+      cancelButtonColor: '#00796b', // Botón cian oscuro
+      background: 'linear-gradient(to bottom, #006064, #000000)', // Fondo degradado cian
+      color: 'white', // Texto cian oscuro
+      customClass: {
+        popup: 'text-lg', // Texto del contenido
+        title: 'text-xl font-bold', // Título más grande
       },
-      error: (err) => {
-        console.error('Error al eliminar el centro:', err);
-        alert('No se pudo eliminar el centro. Intente nuevamente.');
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteCenter(email);
       }
     });
   }
+  
+  deleteCenter(email: string): void {
+    this.apiService.deleteCenter(email).subscribe({
+      next: () => {
+        Swal.fire({
+          title: '¡Centro eliminado!',
+          text: 'El centro se eliminó exitosamente.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#0097a7', // Cian para éxito
+          background: 'linear-gradient(to bottom, #006064, #000000)', // Fondo degradado cian
+          color: 'white', // Texto cian oscuro
+        });
+        this.loadCenters(); // Recargar la lista de centros
+      },
+      error: (err) => {
+        console.error('Error al eliminar el centro:', err);
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo eliminar el centro. Por favor, inténtalo de nuevo.',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#00796b', // Cian oscuro para errores
+          background: 'linear-gradient(to bottom, #006064, #000000)', // Fondo degradado cian
+          color: 'white', // Texto cian oscuro
+        });
+      },
+    });
+  }
+  
 }
