@@ -81,7 +81,6 @@ export class ApiService {
     });
   }
 
-  // Registrar usuario
   registerUser(user: any): Observable<any> {
     const formData = new FormData();
     formData.append('user_name', user.user_name);
@@ -114,26 +113,26 @@ export class ApiService {
       })
     );
   }
-  
-  // Editar donante
-  updateDonor(email: string, updatedDonor: any): Observable<any> {
-    const formData = new FormData();
-    formData.append('user_name', updatedDonor.user_name);
-    formData.append('last_name', updatedDonor.last_name);
-    formData.append('new_email', updatedDonor.email);  // Actualiza con el nuevo email si es necesario
-    formData.append('password', updatedDonor.password);
-    formData.append('phone_number', updatedDonor.phone_number);
-    if (updatedDonor.image) {
-      formData.append('image', updatedDonor.image, updatedDonor.image.name);
-    }
-  
-    return this.http.put(`${this.apiUrl}/updateDonors/${email}`, formData).pipe(
-      catchError((error) => {
-        console.error('Error al actualizar donante', error);
-        return throwError(() => error);
-      })
-    );
+
+// Editar donante
+updateDonor(email: string, updatedDonor: any): Observable<any> {
+  const formData = new FormData();
+  formData.append('user_name', updatedDonor.user_name);
+  formData.append('last_name', updatedDonor.last_name);
+  formData.append('new_email', updatedDonor.email);  // Actualiza con el nuevo email si es necesario
+  formData.append('password', updatedDonor.password);
+  formData.append('phone_number', updatedDonor.phone_number);
+  if (updatedDonor.image) {
+    formData.append('image', updatedDonor.image, updatedDonor.image.name);
   }
+
+  return this.http.put(`${this.apiUrl}/updateDonors/${email}`, formData).pipe(
+    catchError((error) => {
+      console.error('Error al actualizar donante', error);
+      return throwError(() => error);
+    })
+  );
+}
 
   // Obtener usuario por correo electrónico
   getUserByEmail(email: string): Observable<any> {
@@ -217,7 +216,6 @@ export class ApiService {
     return this.http.get<any>(`${this.apiUrl}/centers/shelters`);
   }
 
-
   registerNeed(need: any, center_fk: number): Observable<any> {
     const formData = new FormData();
     formData.append('type_need', need.type_need);
@@ -273,10 +271,6 @@ export class ApiService {
     );
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('An error occurred:', error.error);
-    return throwError(() => new Error('Something went wrong; please try again later.'));
-  }
 
   getNewsS(): Observable<any[]> {
     return this.http.get<any>('http://127.0.0.1:8000/news/special').pipe(
@@ -357,6 +351,81 @@ export class ApiService {
     const apiUrl = `http://127.0.0.1:8000/registerDonation/${donorId}/${needId}`;
     return this.http.post<any>(apiUrl, formData);
   } 
+  
+  // Editar Perfil del centro
+  updateCenter(email: string, updatedCenter: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('user_name', updatedCenter.user_name || '');
+    formData.append('new_email', updatedCenter.new_email || '');
+    formData.append('password', updatedCenter.password || '');
+    formData.append('type_center', updatedCenter.type_center || '');
+    formData.append('needs', updatedCenter.needs || '');
+    formData.append('contact_phone_number', updatedCenter.contact_phone_number || '');
+    formData.append('contact_social_media', updatedCenter.contact_social_media || '');
+    formData.append('contact_others', updatedCenter.contact_others || '');
+    formData.append('address', updatedCenter.address || '');
+    formData.append('is_active', updatedCenter.is_active?.toString() || '');
+    formData.append('is_verified', updatedCenter.is_verified?.toString() || '');
+    formData.append('is_sponsor', updatedCenter.is_sponsor?.toString() || '');
+    if (updatedCenter.image) {
+      formData.append('image', updatedCenter.image, updatedCenter.image.name);
+    }
+  
+    return this.http.put(`${this.apiUrl}/updateCenter/${email}`, formData).pipe(
+      catchError((error) => {
+        console.error('Error al actualizar centro', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<{ users: User[] }>(`${this.apiUrl}/users`).pipe(
+      map(response => response.users), // Asegúrate de que esto mapea correctamente la propiedad `users`
+      catchError((error) => {
+        console.error('Error al obtener usuarios', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'Error desconocido';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error del cliente: ${error.error.message}`;
+    } else {
+      errorMessage = `Error del servidor: ${error.status} - ${error.message}`;
+    }
+    return throwError(errorMessage);
+  }
+
+  deleteCenter(email: string): Observable<any> {
+    return this.http.delete(`http://localhost:8000/deleteCenter/${email}`);
+  }
+ 
+  getAllDonors(): Observable<donor[]> {
+    return this.http.get<{ donors: donor[] }>(`${this.apiUrl}/donors`).pipe(
+      map(response => response.donors),
+      catchError((error) => {
+        console.error('Error al obtener los donantes', error);
+        return throwError(() => error);
+      })
+    );
+  }
+  
+  deleteDonor(email: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/donor/${email}`).pipe(
+      catchError((error) => {
+        console.error('Error al eliminar donante', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  searchDonors(searchTerm: string) {
+    return this.http.get<any[]>(`http://127.0.0.1:8000/donors/search?term=${searchTerm}`);
+  }
+  
   getRanking(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/donationsRan/ranking`);
   } 
@@ -380,4 +449,5 @@ export class ApiService {
   deleteDonation(userId: number | null): Observable<any> {
     return this.http.delete(`${this.apiUrl}/donations/${userId}/`);
   }
+
 }

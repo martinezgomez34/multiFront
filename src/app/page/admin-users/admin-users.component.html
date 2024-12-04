@@ -1,0 +1,56 @@
+<div class="bg-gradient-to-t from-cyan-700/50 bg-white dark:bg-black/95">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Título -->
+    <section class="mb-8">
+      <h1 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Donantes Registrados</h1>
+    </section>
+
+    <!-- Tabla -->
+    <div class="overflow-x-auto shadow rounded-lg border border-gray-200 dark:border-gray-800 max-w-4xl mx-auto">
+      <table class="w-full table-auto bg-white dark:bg-gray-900">
+        <thead class="bg-cyan-500 text-white dark:bg-cyan-700">
+          <tr>
+            <th class="px-2 py-2 text-left">ID</th>
+            <th class="px-2 py-2 text-left">Nombre</th>
+            <th class="px-2 py-2 text-left">Apellido</th>
+            <th class="px-2 py-2 text-left">Email</th>
+            <th class="px-2 py-2 text-left">Teléfono</th>
+            <th class="px-2 py-2 text-center">Verificado</th>
+            <th class="px-2 py-2 text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let donor of filteredDonors"
+            class="border-b last:border-none dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
+            <td class="px-2 py-2 text-sm text-gray-700 dark:text-gray-300">{{ donor.user_id }}</td>
+            <td class="px-2 py-2 text-sm text-gray-700 dark:text-gray-300">{{ donor.user_name }}</td>
+            <td class="px-2 py-2 text-sm text-gray-700 dark:text-gray-300">{{ donor.last_name }}</td>
+            <td class="px-2 py-2 text-sm text-gray-700 dark:text-gray-300">{{ donor.email }}</td>
+            <td class="px-2 py-2 text-sm text-gray-700 dark:text-gray-300">{{ donor.phone_numer }}</td>
+            <td class="px-2 py-2 text-sm text-center">
+              <span
+                class="px-2 py-1 rounded-full text-xs font-semibold"
+                [ngClass]="{
+                  'bg-teal-100 text-teal-700': donor.is_verified,
+                  'bg-red-100 text-red-700': !donor.is_verified
+                }"
+              >
+                {{ donor.is_verified ? 'Sí' : 'No' }}
+              </span>
+            </td>
+            <td class="px-2 py-2 text-center">
+              <button
+                (click)="deleteDonor(donor.email)"
+                class="px-3 py-1 text-sm font-medium text-white bg-cyan-500 rounded-md hover:bg-cyan-400 dark:bg-cyan-600 dark:hover:bg-cyan-500"
+              >
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
