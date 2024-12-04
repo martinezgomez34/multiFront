@@ -1,5 +1,6 @@
 <div [ngClass]="{'dark': isDarkMode}"
 class="flex-1 flex items-center justify-center bg-gradient-to-b from-white to-cyan-700/50 dark:from-black dark:to-cyan-800 min-h-screen">
+
     <div class="max-w-xl mx-auto m-8 p-14">
       <img src="Logo.png" class="mx-auto h-48 sm:h-60 mb-8" alt="Logo" />
       <form [formGroup]="form" (ngSubmit)="onSubmit()">

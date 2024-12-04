@@ -19,3 +19,4 @@ export class ModalOthersComponent {
     this.dialogRef.close(); // Cierra el diálogo
   }
 }
+

@@ -5,7 +5,7 @@ export interface Donor{
     password: string
     type_center: string
     needs?: string
-    contact_phone_number: string
+    contact_phone_numer: string //le cambie el nombre pq asi estaba escrito en la bd
     contact_social_media: string
     contact_others: string
     address: string

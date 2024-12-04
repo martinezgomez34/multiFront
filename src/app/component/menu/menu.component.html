@@ -40,10 +40,25 @@
       </ng-container>
 
       <ng-container *ngIf="isCenter()">
-        <a routerLink="NewsCenter" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">Mis Noticias</a>
-        <a routerLink="Needs" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">Necesidades</a>
-        <a routerLink="CenterInformation" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">Informacion</a>
-        <a routerLink="CenterInformation" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">Inventario</a>
+        <a routerLink="NewsCenter" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+          Mis Noticias
+        </a>
+        <a routerLink="Needs" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+          Necesidades
+        </a>
+        <a routerLink="edit-center" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+          Perfil
+        </a>
+        <a routerLink="CenterInformation" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+          Inventario
+        </a>
+        <a routerLink="admin-users" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+          Eliminar Donantes
+        </a>
+        <a routerLink="delete-centers" class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-800 rounded-md">
+          Eliminar Centros
+        </a>
+
       </ng-container>
 
       <ng-container *ngIf="isRegularUser()">
