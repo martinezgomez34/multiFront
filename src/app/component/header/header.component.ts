@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { DarkmodeButtonComponent } from '../button/darkmode-button/darkmode-button.component';
 import { LogoComponent } from "../logo/logo.component";
 import { StateService } from '../../service/state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -26,10 +27,16 @@ export class HeaderComponent {
   showMenu = false;
 
   stateService = inject(StateService)
-  constructor(){
+  
+  constructor(private router: Router){
     console.log(this.stateService, "paso por aqui")
   }
 
+  logout(): void {
+    this.stateService.logout();
+    this.router.navigate(['']); // Redirige al usuario a la página de inicio de sesión
+  }
+  
   toggleDarkMode(isDark: boolean): void { 
     this.darkModeToggled.emit(isDark); 
   }

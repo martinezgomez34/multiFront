@@ -1,10 +1,11 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { User } from '../models/user/user';
-import { Donor } from '../models/donor'; // Importa el modelo de Donor
-import { Center } from '../models/center'; // Importa el modelo de Center
+import { Donor } from '../models/donor'; 
+import { Center } from '../models/center';
+import { LocalStorageService } from './local-storage.service';
 
 export interface UserState {
-  User: User | Donor | Center; // Permite que sea de tipo User, Donor o Center
+  User: User | Donor | Center; 
   isAuthenticated: boolean;
 }
 
@@ -13,7 +14,7 @@ export interface UserState {
 })
 export class StateService {
   private _state = signal<UserState>({
-    User: {
+    User: { 
       user_name: '', 
       email: '', 
       password: '',
@@ -28,31 +29,53 @@ export class StateService {
   readonly User = computed(() => this._state().User);
   readonly isAuthenticated = computed(() => this._state().isAuthenticated);
 
+  constructor(private localStorageService: LocalStorageService) {
+    const savedUser = this.localStorageService.getUser<User | Donor | Center>();
+    if (savedUser) {
+      this._state.update((state) => ({
+        ...state,
+        User: savedUser,
+        isAuthenticated: true
+      }));
+    }
+  }
+
   setUser(user: User | Donor | Center): void {
     if (!user.user_name) {
       console.error('El user_name no está definido');
-      return; // Si user_name está vacío o indefinido, no actualiza el estado
+      return; 
     }
 
     this._state.update((state) => {
       const updatedState = {
         ...state,
-        User: user, // Actualiza con la información del usuario, ya sea User, Donor o Center
+        User: user,
         isAuthenticated: true
       };
-      console.log('Updating state:', updatedState); // Verifica el nuevo estado
+      console.log('Updating state:', updatedState); 
+      this.localStorageService.setUser(user)
       return updatedState;
     });
+    
   }
 
   logout(): void {
-    this._state.update((state) => ({
-      ...state,
-      User: {
-        ...state.User,
-        user_name: ''
-      },
-      isAuthenticated: false
-    }));
+    this._state.update((state) => {
+      this.localStorageService.removeUser();
+      return {
+        ...state,
+        User: {
+          user_name: '', // Limpia el nombre de usuario
+          email: '',
+          password: '',
+          is_verified: false,
+          is_admin: false,
+          image: '',
+          is_sponsor: false
+        },
+        isAuthenticated: false
+      };
+    });
   }
+  
 }
